@@ -4,4 +4,6 @@
 
 ## Environments
 ### RaspberryPi
-- python==3.8
+- Ubuntu 20.04 Desktop
+- Python --version==3.8
+- TPU : Google Coral
