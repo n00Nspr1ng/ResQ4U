@@ -3,6 +3,9 @@
 import serial
 
 class arduinoSerialWrapper():
+    '''
+        
+    '''
     def __init__(self, device, baudrate):
         self.arduino = serial.Serial(device, baudrate, timeout=1)
 
