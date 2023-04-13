@@ -13,6 +13,8 @@ class arduinoSerialWrapper():
     '''
     
     def __init__(self, device, baudrate=9600):
+        
+        self.running_flag = True
 
         # Open arduino communication
         try:
@@ -22,6 +24,7 @@ class arduinoSerialWrapper():
             print("Device can not be found or can not be configured.")
 
         self.reset_buff()
+
 
 
     def reset_buff(self):
@@ -36,24 +39,24 @@ class arduinoSerialWrapper():
 
 
     def send_speed(self, motor_speed):
+        self.running_flag = True
+
+        # May change to senidng pwm after testing motor
         self.arduino.write(motor_speed)
 
-        
+        while(self.running_flag):
+            self.check_done()
+
+
     def check_done(self):
-        while(True):
-            if (self.arduino.readable()):
-                done_flag = int(self.arduino.readline().decode('utf-8').rstrip())
-                if (done_flag == True):
-                    break
-        return True
+        # check whether arduino is done doing job.
+        if (self.arduino.readable()):
+            self.running_flag = int(self.arduino.readline().decode('utf-8').rstrip())
 
 
 if __name__ == "__main__":
-    arduino = arduinoSerialWrapper("/dev/ttyACM0", 9600, timeout=1)
+    arduino = arduinoSerialWrapper("COM3", 9600, timeout=1)
     arduino.read()
     time.sleep(1)
 
     arduino.send_speed(100)
-    arduino.check_done()
-
-    
