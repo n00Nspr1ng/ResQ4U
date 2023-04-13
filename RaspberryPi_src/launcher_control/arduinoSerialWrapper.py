@@ -4,9 +4,13 @@ import serial
 
 class arduinoSerialWrapper():
     '''
-        
+    Wrapper for arduino serial communication.
+    Args:
+        device: The tty port number to connect.
+                Usually set to /dev/ttyACM0.
+        baudrate: Baudrate of arduino. Default is set to 9600.
     '''
-    def __init__(self, device, baudrate):
+    def __init__(self, device, baudrate=9600):
         self.arduino = serial.Serial(device, baudrate, timeout=1)
 
     def resetBuff(self):
