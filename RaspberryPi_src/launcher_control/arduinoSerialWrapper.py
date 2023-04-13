@@ -26,7 +26,6 @@ class arduinoSerialWrapper():
         self.reset_buff()
 
 
-
     def reset_buff(self):
         self.arduino.reset_input_buffer()
 
