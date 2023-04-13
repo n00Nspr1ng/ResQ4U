@@ -8,4 +8,5 @@
 ### RaspberryPi 4B+ RAM 8Gb
 - Ubuntu 20.04 Desktop
 - Python --version==3.8
-- TPU : Google Coral
+- Tensorflow light on TPU (Google Coral)
+- MobileNet SSD v2
