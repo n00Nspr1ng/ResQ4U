@@ -19,16 +19,20 @@ ser = Serial(
     timeout = 3
 )
 
+# or change it to :::::: while True
 while(1) : 
     if ser.in_waiting > 0 :
         print("serial wating > 0")
         
         if ser.readline() == HEADER :
-            print("read on")
+            
+            print("read on") #for checking
             print(HEADER)
             uart[0] = HEADER
+            
             if ser.readline() == HEADER :
                 uart[1] = HEADER
+                
                 for i in range(2, 9):
                     uart[i] = int.from_bytes(ser.readline(), byteorder = 'little')
                 check = uart[0]+uart[1]+uart[2]+uart[3]+uart[4]+uart[5]+uart[6]+uart[7]
