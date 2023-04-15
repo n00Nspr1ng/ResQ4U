@@ -2,6 +2,7 @@
 #include<SoftwareSerial.h>
 
 // define the soft serial port as Serial1, pin2 as RX, and pin3 as TX
+// White & Green lines to 2 & 3 pins
 SoftwareSerial Serial1(2,3);
 
 
@@ -37,9 +38,9 @@ void loop()
         check=uart[0]+uart[1]+uart[2]+uart[3]+uart[4]+uart[5]+uart[6]+uart[7];
         if(uart[8]==(check&0xff))// check the received data as per protocols
         {
-          dist=uart[2]+uart[3]*256;// calculate distance value
-          strength=uart[4]+uart[5]*256;// calculate signal strength value
-          Serial.print("dist = ");
+          dist=uart[2]+uart[3]*256;// calculate distance value -- need check
+          strength=uart[4]+uart[5]*256;// calculate signal strength value -- need check
+          Serial.print("distance = ");
           Serial.print(dist);// output LiDAR tests distance value
           Serial.print('\t');
           Serial.print("strength = ");
