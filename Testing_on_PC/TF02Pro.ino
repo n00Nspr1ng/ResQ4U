@@ -38,10 +38,16 @@ void loop()
         check=uart[0]+uart[1]+uart[2]+uart[3]+uart[4]+uart[5]+uart[6]+uart[7];
         if(uart[8]==(check&0xff))// check the received data as per protocols
         {
-          dist=uart[2]+uart[3]*256;// calculate distance value -- need check
+          dist=uart[2]+uart[3]*256;// calculate distance value -- need check ( in CENTIMETERS )
           strength=uart[4]+uart[5]*256;// calculate signal strength value -- need check
           Serial.print("distance = ");
           Serial.print(dist);// output LiDAR tests distance value
+          Serial.print("cm");
+          Serial.print('\t');
+          dist_m = dist * 0.01;
+          Serial.print(dist_m); // distance in meter
+          Serial.print("METER");
+          Serial.print('\t');
           Serial.print('\t');
           Serial.print("strength = ");
           Serial.print(strength);// output signal strength value
