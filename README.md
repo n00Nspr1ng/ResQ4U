@@ -11,3 +11,14 @@
 - Python --version==3.8
 - Tensorflow light on TPU (Google Coral)
 - MobileNet SSD v2
+
+## Hardware Specifications
+### Launcher
+- 24V 3000rpm BLDC Motor
+- MD200T BLDC Motor Controller
+### Detection
+- IR Night Vision Camera (not specified yet)
+- TF02(pro) one-point LiDAR
+### Pan-tilt
+- stepper motor (not specified yet)
+- servo motor (not specified yet)
