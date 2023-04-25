@@ -12,24 +12,26 @@ class PanTilt_STEP:
     def __init__(self, pan_step, pan_dir, tilt_step, tilt_dir, pan_steps_per_rev, tilt_steps_per_rev):
         # Set the GPIO mode
         GPIO.setmode(GPIO.BCM)
-        # Set the pins as attributes
+        # set pins
         self.pan_step = pan_step
         self.pan_dir = pan_dir
         self.tilt_step = tilt_step
         self.tilt_dir = tilt_dir
-        # Set the steps per revolution as attributes
+        # set steps per revolution as attributes
         self.pan_steps_per_rev = pan_steps_per_rev
         self.tilt_steps_per_rev = tilt_steps_per_rev
-        # Set the pins as outputs
+        # set the pins as outputs
         GPIO.setup(self.pan_step, GPIO.OUT)
         GPIO.setup(self.pan_dir, GPIO.OUT)
         GPIO.setup(self.tilt_step, GPIO.OUT)
         GPIO.setup(self.tilt_dir, GPIO.OUT)
+        
         # Define the delay between each step
         self.delay = 0.01
 
     # PAN
     def pan(self, angle):
+        # 0 -> CW(+), 1-> CCW(-)
         # Calculate number of steps to move
         steps = int(angle * self.pan_steps_per_rev / 360)
         # Set direction
