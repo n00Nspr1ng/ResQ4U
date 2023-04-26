@@ -20,5 +20,5 @@
 - IR Night Vision Camera (not specified yet)
 - TF02(pro) one-point LiDAR
 ### Pan-tilt
-- stepper motor (not specified yet)
+- Sanyo Denki 103h7126-0447 stepper motor 
 - servo motor (not specified yet)
