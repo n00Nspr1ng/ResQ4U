@@ -35,12 +35,27 @@ if __name__ == "__main__":
     #     time.sleep(0.2)
 
     panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
-    time.sleep(2)
-    panMotor.move(angle=90, dir=0)
-    time.sleep(0.2)
-    panMotor.return_to_initial()
+    tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=4)
     
-    time.sleep(1)
-    panMotor.move(angle=45, dir=1)
+    time.sleep(2)
+    for i in range(20):
+        panMotor.move(angle=1, ccw_dir=-1)
+        tiltMotor.move(angle=1, ccw_dir=-1)
     time.sleep(0.2)
+
     panMotor.return_to_initial()
+    tiltMotor.return_to_initial()
+
+    #time.sleep(0.2)
+    #for i in range(15):
+    #    panMotor.move(angle=1, ccw_dir=-1)
+    #    tiltMotor.move(angle=1, ccw_dir=-1)
+    #time.sleep(0.2)
+
+    #panMotor.return_to_initial()
+    #tiltMotor.return_to_initial()
+    
+    # time.sleep(1)
+    # panMotor.move(angle=30, dir=1)
+    # time.sleep(0.2)
+    # panMotor.return_to_initial()

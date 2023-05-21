@@ -1,35 +1,50 @@
-#define DIR1 2
-#define START_STOP1 3
-#define SPEED_IN1 A0
+#include <SoftwareSerial.h>
 
-//#define DIR2 
-//#define START_STOP2 
-//#define SPEED_IN2 
+char flag;
+float distance;
+
+bool send_dist_flag = false;
 
 void setup()
 {
-    Serial.begin(9600);
+  // Serial for Raspberry Pi
+  Serial.begin(9600); 
 
-    pinMode(DIR1, OUTPUT);
-    pinMode(START_STOP1, OUTPUT);
-    pinMode(SPEED_IN1, OUTPUT);
+  //initialize_motor();
+  initialize_lidar();
+  //initialize_feeder();
 
-    analogWrite(SPEED_IN1, map(0, 0, 100, 0, 255));
-
-    Serial.println("Initialized.");
-    Serial.println("Enter a number between 0 ~ 100.\n");
+  Serial.println("hello");
 }
+
 
 void loop()
 {
-  if(Serial.available())
-  {
-    int speed = Serial.parseInt();
-    analogWrite(SPEED_IN1, map(speed, 0, 100, 0, 255));
 
-    Serial.print("Spinning at ");
-    Serial.println(speed);
+  if (Serial.available())
+  {
+    flag = Serial.read();
   }
+  Serial.println(flag);
+
   
-  delay(20);
+  if (flag == 'd') //detected
+  {
+    lidar_loop();
+  }
+  else if (flag == 'a') //aligned
+  {
+    if (send_dist_flag == false){
+      put_dist_flag();
+      send_dist_flag = true;
+    }
+    lidar_loop();
+
+    float distance = get_final_dist();
+    if (distance != 0)
+    {
+      bldc_control(distance/100.0);
+      flag = 'e';
+    }     
+  }
 }

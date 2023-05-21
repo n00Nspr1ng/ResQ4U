@@ -9,13 +9,13 @@ class arduino_uno:
 # Step motor for pan, set up as GPIO.BCM
 @dataclass
 class pan_motor:
-    STEP : int = 23
-    DIR : int = 24
+    STEP : int = 24
+    DIR : int = 23
 
 @dataclass
 class tilt_motor:
-    STEP : int = 16
-    DIR : int = 20
+    STEP : int = 20
+    DIR : int = 16
 
 # Servo motor for tilt, set up as GPIO.BCM
 servomotor : int = 25

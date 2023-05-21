@@ -1,16 +1,14 @@
-#include <SoftwareSerial.h>
-
-SoftwareSerial Serial1(2,3);
+SoftwareSerial Serial1(LIDAR_RX, LIDAR_TX);
 
 int dist;
 int strength;
 int check;
-int i;
+int loop_i;
 int uart[9];
 
 const int HEADER = 0x59;
 
-const int FILTER_LENGTH = 10; // 이동평균 필터 길이
+const int FILTER_LENGTH = 10; // Length of Moving Average
 const int DIST_MIN = 100; // 필터링할 최소 거리값
 const int DIST_MAX = 4000; // 필터링할 최대 거리값
 const int STRENGTH_THRESHOLD = 50; // 필터링할 최대 신호 강도
@@ -24,31 +22,34 @@ int avg_dist = 0;
 int idx = 0;
 int count = 0;
 bool dist_flag = false; // Align 되면 true
-int j = 0;
+int loop_j = 0;
 int final_dist = 0;
-bool launch_flag = false; // final_dist 계산 되면 true
 
-void setup() {
-  Serial.begin(9600);
+bool calculation_flag = false;
+
+void initialize_lidar() {
   Serial1.begin(115200);
+
+  Serial.println("Done LiDAR initialization");
 }
 
-void get_final_dist() {
+
+int calculate_final_dist() {  
   if (avg_dist > 0) {
     final_dist += avg_dist;
-    j += 1;
+    loop_j += 1;
   }
-  if (j == FINAL_DIST_BUFFER_LENGTH) {
+  if (loop_j == FINAL_DIST_BUFFER_LENGTH) {
     final_dist /= FINAL_DIST_BUFFER_LENGTH;
     Serial.print("final_distance = ");
     Serial.print(final_dist);
     Serial.print('\n');
+    calculation_flag = true;
     dist_flag = false;
-    j = 0;
-    final_dist = 0;
-    launch_flag = true;
+    loop_j = 0;
   }
 }
+
 
 void filter() {
   if (strength >= STRENGTH_THRESHOLD && dist >= DIST_MIN && dist <= DIST_MAX) {
@@ -78,7 +79,8 @@ void filter() {
     avg_dist = sum_dist / FILTER_LENGTH;
 
     if (dist_flag) {
-      get_final_dist();
+      Serial.println("calculating");
+      calculate_final_dist();
     }
   }
   else {
@@ -89,29 +91,50 @@ void filter() {
   }
 }
 
-void loop() {
+
+void lidar_loop() {
   if (Serial1.available()) {
     if (Serial1.read() == HEADER) {
       uart[0] = HEADER;
       if (Serial1.read() == HEADER) {
         uart[1] = HEADER;
-        for (i = 2; i < 9; i++) {
-          uart[i] = Serial1.read();
+        for (loop_i = 2; loop_i < 9; loop_i++) {
+          uart[loop_i] = Serial1.read();
         }
         check = uart[0] + uart[1] + uart[2] + uart[3] + uart[4] + uart[5] + uart[6] + uart[7];
         if (uart[8] == (check & 0xff)) {
           dist = uart[2] + uart[3] * 256;
           strength = uart[4] + uart[5] * 256;
-          
+          Serial.println("filtering");
           filter();
         }
       }
     }
     // Temporary (Enter 입력하면 dist_flag true)
-    if (Serial.available() > 0) {
-      if (Serial.read() == '\n') {
-        dist_flag = true;
-      }
-    }
+//    if (Serial.available() > 0) {
+//      if (Serial.read() == '\n') {
+//        dist_flag = true;
+//      }
+//    }
+  }
+}
+
+
+void put_dist_flag()
+{
+  dist_flag = true;
+}
+
+
+int get_final_dist()
+{
+  if (calculation_flag == false)
+  {
+    return 0;
+  }
+  else if (calculation_flag == true)
+  {
+    calculation_flag = false;
+    return final_dist;
   }
 }

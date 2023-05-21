@@ -25,14 +25,14 @@ class StepMotorController:
         GPIO.setup(self.STEP, GPIO.OUT)
     
 
-    def move(self, angle, dir):
+    def move(self, angle, ccw_dir):
         # Note that this "angle" is difference between current angle and desired angle
         step = int(angle / self.angle_per_step * self.gear_ratio)
         print("steps to move", step)
 
         # Set direction
-        # 0 -> CW(+), 1-> CCW(-)
-        GPIO.output(self.DIR, dir)
+        # 0 -> CW, 1-> CCW
+        GPIO.output(self.DIR, ccw_dir)
 
         # Move step 
         for i in range(step):
