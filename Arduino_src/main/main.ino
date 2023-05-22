@@ -10,11 +10,11 @@ void setup()
   // Serial for Raspberry Pi
   Serial.begin(9600); 
 
-  //initialize_motor();
+  initialize_motor();
   initialize_lidar();
   //initialize_feeder();
 
-  Serial.println("hello");
+  Serial.println("Arduino is ready");
 }
 
 
@@ -22,17 +22,19 @@ void loop()
 {
 
   if (Serial.available())
-  {
+  { // Read flag from Raspberry Pi
     flag = Serial.read();
   }
-  Serial.println(flag);
+  
+  // Send flag to Raspberry Pi
+  Serial.println(flag);  
 
   
-  if (flag == 'd') //detected
+  if (flag == 'd') //Flag : "detected"
   {
     lidar_loop();
   }
-  else if (flag == 'a') //aligned
+  else if (flag == 'a') //Flag : "aligned"
   {
     if (send_dist_flag == false){
       put_dist_flag();
@@ -44,7 +46,8 @@ void loop()
     if (distance != 0)
     {
       bldc_control(distance/100.0);
-      flag = 'e';
+      //feed_control();
+      flag = 'e'; //Flag : "end"
     }     
   }
 }
