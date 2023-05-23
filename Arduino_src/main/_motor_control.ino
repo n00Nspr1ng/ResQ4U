@@ -9,7 +9,9 @@ float speed_dist_chart[10][2] = {{170.0, 1.97},
                                   {210.0, 13.87},
                                   {215.0, 13.9}};
 
-void initialize_motor()
+int current_speed;
+
+void initialize_bldc()
 {
   pinMode(DIR1, OUTPUT);
   pinMode(START_STOP1, OUTPUT);
@@ -25,8 +27,8 @@ void initialize_motor()
   digitalWrite(DIR2, LOW);
   digitalWrite(START_STOP1, HIGH); //stop
   digitalWrite(START_STOP2, HIGH); //stop
-  
-  //off_flag = HIGH;
+
+  Serial.println("Done BLDC initialization");
 
 }
 
@@ -37,7 +39,8 @@ void bldc_control(float distance)
   int speed = get_speed(distance);
   Serial.print("Speed = ");
   Serial.println(speed);
-/*
+  current_speed = speed;
+
   // Turn motor on
   digitalWrite(START_STOP1, LOW);
   digitalWrite(START_STOP2, LOW);
@@ -51,23 +54,60 @@ void bldc_control(float distance)
   }
   else if (speed < 190)
   {
+    Serial.println("ff");
     analogWrite(SPEED_IN1, 150);
-    delay(50);
+    delay(250);
     analogWrite(SPEED_IN1, 170);
-    delay(50);
+    delay(250);
     analogWrite(SPEED_IN1, speed);
   }
   else if (speed < 210)
   {
     analogWrite(SPEED_IN1, 150);
-    delay(50);
+    delay(250);
     analogWrite(SPEED_IN1, 170);
-    delay(50);
+    delay(250);
     analogWrite(SPEED_IN1, 190);
-    delay(50);
+    delay(250);
     analogWrite(SPEED_IN1, speed);
   }
-  */
+}
+
+void turn_off_motor()
+{
+  Serial.print("current speed at");
+  Serial.println(current_speed);
+  
+  // Slowly decrease motor speed
+  if (current_speed < 170)
+  {
+    analogWrite(SPEED_IN1, 150);
+    delay(250);
+    analogWrite(SPEED_IN1, 125);
+  }
+  else if (current_speed < 190)
+  {
+    analogWrite(SPEED_IN1, 170);
+    delay(250);
+    analogWrite(SPEED_IN1, 150);
+    delay(250);
+    analogWrite(SPEED_IN1, 125);
+  }
+  else if (current_speed < 210)
+  {
+    analogWrite(SPEED_IN1, 190);
+    delay(250);
+    analogWrite(SPEED_IN1, 170);
+    delay(250);
+    analogWrite(SPEED_IN1, 150);
+    delay(250);
+    analogWrite(SPEED_IN1, 125);
+  }
+
+  // Turn motor off
+  digitalWrite(START_STOP1, HIGH);
+  digitalWrite(START_STOP2, HIGH);
+
 }
 
 

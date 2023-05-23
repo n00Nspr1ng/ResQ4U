@@ -93,7 +93,10 @@ void filter() {
 
 
 void lidar_loop() {
+  Serial.println("loop");
+
   if (Serial1.available()) {
+    Serial.println("yay");
     if (Serial1.read() == HEADER) {
       uart[0] = HEADER;
       if (Serial1.read() == HEADER) {

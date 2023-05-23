@@ -1,5 +1,5 @@
-#define STEP 4
-#define DIR 5
+#define STEP 8
+#define DIR 9
 
 //steps per revolution 3200
 
@@ -7,7 +7,7 @@ unsigned int delay_time = 40;
 unsigned int steps, dir;
 
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(9600);
   
   pinMode(STEP, OUTPUT);
   pinMode(DIR, OUTPUT);
@@ -17,6 +17,7 @@ void setup() {
 }
 
 void loop() {
+  digitalWrite(DIR, LOW);
   if (Serial.available())
   {
     steps = Serial.parseInt();
