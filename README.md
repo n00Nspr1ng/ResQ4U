@@ -7,8 +7,8 @@
 
 ## Environments
 ### RaspberryPi 4B+ RAM 8Gb
-- Ubuntu 20.04 Desktop
-- Python --version==3.8
+- Raspbian Full Desktop 32bit
+- Python --version==3.9
 - Tensorflow light on TPU (Google Coral)
 - MobileNet SSD v2
 
