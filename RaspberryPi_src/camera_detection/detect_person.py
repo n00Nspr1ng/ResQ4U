@@ -1,31 +1,3 @@
-# Copyright 2019 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""A demo that runs object detection on camera frames using OpenCV.
-
-TEST_DATA=../all_models
-
-Run face detection model:
-python3 detect.py \
-  --model ${TEST_DATA}/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite
-
-Run coco model:
-python3 detect.py \
-  --model ${TEST_DATA}/mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite \
-  --labels ${TEST_DATA}/coco_labels.txt
-
-"""
 import argparse
 import cv2
 import os
@@ -66,7 +38,7 @@ class personDetector():
         self.j = 0
 
     def detect(self):
-        default_model_dir = 'all_models'
+        default_model_dir = '/home/roboin/ResQ4U/RaspberryPi_src/all_models/'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
         # default_model = 'yolov5s-int8-224_edgetpu.tflite'
         default_labels = 'coco_labels.txt'
@@ -88,8 +60,8 @@ class personDetector():
         labels = read_label_file(args.labels)
         inference_size = input_size(interpreter)
 
-        # cap = cv2.VideoCapture(args.camera_idx)
-        cap = cv2.VideoCapture(0, cv2.CAP_V4L)
+        # cap = cv2.VideoCapture(args.camera_idx, cv2.CAP_V4L)
+        cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
 
         while cap.isOpened():
             ret, frame = cap.read()
