@@ -28,7 +28,7 @@ class StepMotorController:
     def move(self, angle, ccw_dir):
         # Note that this "angle" is difference between current angle and desired angle
         step = int(angle / self.angle_per_step * self.gear_ratio)
-        print("steps to move", step)
+        # print("steps to move", step)
 
         # Set direction
         # 0 -> CW, 1-> CCW
@@ -44,7 +44,7 @@ class StepMotorController:
             self.current_angle += angle
         else:
             self.current_angle -= angle
-        print("angle =", self.current_angle)
+        # print("current angle of step motor = ", self.current_angle)
         
 
     def move_v2(self, step, dir): #DEPRECATED
