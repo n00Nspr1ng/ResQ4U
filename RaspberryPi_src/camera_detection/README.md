@@ -1,8 +1,6 @@
 ### Setup
-1. Required Libraries
+1. Before Running code, Check Required Libraries Installed..
     ```
-    cd Coral
-
     bash install_requirements.sh
     ```
 2. Detection Models
