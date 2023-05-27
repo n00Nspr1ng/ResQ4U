@@ -17,14 +17,14 @@ const int            COUNT_THRESHOLD = 20;    // 이전의 평균 거리값을 �
 const int   FINAL_DIST_BUFFER_LENGTH = 20;
 
 
-int filtered_dist[FILTER_LENGTH];
-int sum_dist = 0;
-int avg_dist = 0;
-int idx = 0;
-int count = 0;
-bool dist_flag = false; // Align 되면 true
-int loop_j = 0;
-int final_dist = 0;
+int    filtered_dist[FILTER_LENGTH];
+int    sum_dist = 0;
+int    avg_dist = 0;
+int         idx = 0;
+int       count = 0;
+bool  dist_flag = false;  // Align 되면 true
+int      loop_j = 0;
+int  final_dist = 0;
 
 bool calculation_flag = false;
 
