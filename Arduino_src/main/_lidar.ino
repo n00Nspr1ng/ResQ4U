@@ -6,15 +6,16 @@ int check;
 int loop_i;
 int uart[9];
 
-const int HEADER = 0x59;
+const int                     HEADER = 0x59;  // Data type
 
-const int FILTER_LENGTH = 10; // Length of Moving Average
-const int DIST_MIN = 100; // 필터링할 최소 거리값
-const int DIST_MAX = 4000; // 필터링할 최대 거리값
-const int STRENGTH_THRESHOLD = 50; // 필터링할 최대 신호 강도
-const int DISTANCE_THRESHOLD = 300; // 이상치를 판단하기 위한 거리값의 임계값
-const int COUNT_THRESHOLD = 20; // 이전의 평균 거리값을 유지할 카운트 임계값
-const int FINAL_DIST_BUFFER_LENGTH = 20;
+const int              FILTER_LENGTH = 10;    // Length of Moving Average
+const int                   DIST_MIN = 100;   // 필터링할 최소 거리값
+const int                   DIST_MAX = 4000;  // 필터링할 최대 거리값
+const int         STRENGTH_THRESHOLD = 50;    // 필터링할 최대 신호 강도
+const int         DISTANCE_THRESHOLD = 300;   // 이상치를 판단하기 위한 거리값의 임계값
+const int            COUNT_THRESHOLD = 20;    // 이전의 평균 거리값을 유지할 카운트 임계값
+const int   FINAL_DIST_BUFFER_LENGTH = 20;
+
 
 int filtered_dist[FILTER_LENGTH];
 int sum_dist = 0;
@@ -96,7 +97,7 @@ void lidar_loop() {
   Serial.println("loop");
 
   if (Serial1.available()) {
-    Serial.println("yay");
+    Serial.println("yay"); //?
     if (Serial1.read() == HEADER) {
       uart[0] = HEADER;
       if (Serial1.read() == HEADER) {
