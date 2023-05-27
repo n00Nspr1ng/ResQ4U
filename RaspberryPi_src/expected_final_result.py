@@ -1,16 +1,5 @@
 # imports (extract to utils file and import at once..)
-import argparse
-import cv2
-import os
-from pycoral.adapters.common import input_size
-from pycoral.adapters.detect import get_objects
-from pycoral.utils.dataset import read_label_file
-from pycoral.utils.edgetpu import make_interpreter
-from pycoral.utils.edgetpu import run_inference
-from serial import Serial
-import serial
-import RPi.GPIO as GPIO
-import time
+from imports import *
 
 class HumanDetection:
     def __init__(self, model_path, label_path, top_k=3, threshold=0.1):
@@ -63,21 +52,23 @@ class PanTilt:
         time.sleep(0.3)  # give the motor time to move
 
     def pan_tilt_to_match_frame_center_to_bounding_box_center(self): # used previous algorithm I made..
-        error_threshold = 10
-        step_size = 5
+        
+        error_threshold =  1
+        pan_step        = 15
+        tilt_step       =  5
 
         error_x = self.frame_center[0] - self.bounding_box_center[0]
         error_y = self.frame_center[1] - self.bounding_box_center[1]
 
         if (abs(error_x) > error_threshold) or (abs(error_y) > error_threshold):
             if error_x > 0:
-                self.pan_angle += step_size
+                self.pan_angle += pan_step
             else:
-                self.pan_angle -= step_size
+                self.pan_angle -= pan_step
             if error_y > 0:
-                self.tilt_angle += step_size
+                self.tilt_angle += tilt_step
             else:
-                self.tilt_angle -= step_size
+                self.tilt_angle -= tilt_step
 
             self.pan_angle = max(50, min(130, self.pan_angle))
             self.tilt_angle = max(0, min(70, self.tilt_angle))
@@ -188,3 +179,4 @@ class Robot:
 
         cap.release()
         cv2.destroyAllWindows()
+      
