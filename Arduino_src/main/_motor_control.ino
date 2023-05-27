@@ -28,7 +28,7 @@ void initialize_bldc()
   digitalWrite(START_STOP1, HIGH); //stop
   digitalWrite(START_STOP2, HIGH); //stop
 
-  Serial.println("Done BLDC initialization");
+  Serial.println("BLDC Initialization Done");
 
 }
 
@@ -113,27 +113,36 @@ void turn_off_motor()
 
 int get_speed(float distance)
 {
-  int min_index = 0;
-  float min_dist = distance - speed_dist_chart[min_index][1];
-  float temp;
-  for (int i=1; i<10; i++)
+  int low = 0;
+  int high = 9;
+  int mid;
+  
+  while (low <= high)
   {
-    temp = distance - speed_dist_chart[i][1];
+    mid = (low + high) / 2;
     
-    if (temp < 0)
-      break;  
-    
-    min_dist = temp;
-    min_index = i;
+    if (speed_dist_chart[mid][1] < distance)
+      low = mid + 1;
+    else if (speed_dist_chart[mid][1] > distance)
+      high = mid - 1;
+    else
+      return speed_dist_chart[mid][0];
   }
-  Serial.print("min_index = ");
-  Serial.println(speed_dist_chart[min_index][0]);
-
-  int bldc_input;
-  if (temp = 0 || min_index == 9)
-    bldc_input = speed_dist_chart[min_index][0];
-  else
-    bldc_input = round(speed_dist_chart[min_index][0] + (speed_dist_chart[min_index + 1][0] - speed_dist_chart[min_index][0])/(speed_dist_chart[min_index + 1][1] - speed_dist_chart[min_index][1])*(distance - speed_dist_chart[min_index][1]));
-
+  
+  // Find 2 closest distances (high & low)
+  int index1 = high;
+  int index2 = low;
+  
+  // Interpolate distances from chart
+  float dist1 = speed_dist_chart[index1][1];
+  float dist2 = speed_dist_chart[index2][1];
+  
+  float ratio = (distance - dist1) / (dist2 - dist1);
+  
+  int speed1 = speed_dist_chart[index1][0];
+  int speed2 = speed_dist_chart[index2][0];
+  
+  int bldc_input = round(speed1 + ratio * (speed2 - speed1));
+  
   return bldc_input;
 }
