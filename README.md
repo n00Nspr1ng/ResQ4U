@@ -6,7 +6,7 @@
 ![그림2](https://user-images.githubusercontent.com/94898107/231674620-2ef196f8-fb4f-4b5c-8249-f2efc937a341.png)
 
 ## Environments
-### RaspberryPi 4B+ RAM 8Gb
+### RaspberryPi 4B+ RAM 4Gb
 - Raspbian Full Desktop 32bit
 - Python --version==3.9
 - Tensorflow light on TPU (Google Coral)
@@ -16,9 +16,10 @@
 ### Launcher
 - 24V 3000rpm BLDC Motor
 - MD200T BLDC Motor Controller
+- Toothed belt & Stepper motor driven Linear Translator for Feeding
 ### Detection
-- IR Night Vision Camera (not specified yet)
-- TF02(pro) one-point LiDAR
+- IR Night Vision Camera - Pi Camera with IR-cut filter & LED
+- Benwake TF02(pro) one-point LiDAR
 ### Pan-tilt
 - Sanyo Denki 103h7126-0447 stepper motor 
 - servo motor (not specified yet)
