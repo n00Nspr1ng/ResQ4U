@@ -35,7 +35,7 @@ if __name__ == "__main__":
     #     time.sleep(0.2)
 
     panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
-    tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=4)
+    tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=2)
     
     time.sleep(2)
     for i in range(20):

@@ -1,4 +1,4 @@
-from imports import *
+from common.imports import *
 
 def append_objs_to_img(cv2_im, inference_size, objs, labels):
     height, width, channels = cv2_im.shape
@@ -30,7 +30,6 @@ class HumanDetection:
         self.cap = None
 
     
-
     def if_detected(self, frame):
         cv2_im_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         cv2_im_rgb = cv2.resize(cv2_im_rgb, self.inference_size)

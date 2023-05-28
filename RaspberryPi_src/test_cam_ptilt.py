@@ -1,4 +1,4 @@
-from imports import *
+from common.imports import *
 from motor_control.stepmotor_control import StepMotorController
 from test_pantilt_class import *
 from test_detect_class import *

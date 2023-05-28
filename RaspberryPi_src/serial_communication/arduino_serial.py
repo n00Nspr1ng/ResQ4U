@@ -22,29 +22,31 @@ class SerialWrapper():
             print("Device can not be found or can not be configured.")
 
         # Flags to send to device
-        self.detect_flag : int = 1
-        self.align_flag : int = 2
-
-        self.received : bool = False
+        self.detect_flag : bool = False
+        self.align_flag : bool = False
+        self.end_flag : bool = False
 
         # Flush buffer
         self.device.reset_input_buffer()
 
 
     #Use either get_flag or wait_until_flag
-    def get_flag(self): 
+    def check_end_flag(self): 
         if self.device.readable():
             line = self.device.readline().decode('utf-8').rstrip()
-        
-        return line
 
-    def wait_until_done(self):
-        while (True):
-            if (self.device.readable()):
-                break
-     
+            if (line == "e"):
+                self.align_flag = False
+                self.end_flag = True        
+
 
     def send_flag(self, flag):
+        if (flag == "d"):
+            self.detect_flag = True
+        elif (flag == "a"):
+            self.detect_flag = False
+            self.align_flag = True
+
         self.device.write(flag.encode())
 
 

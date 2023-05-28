@@ -1,12 +1,13 @@
-from imports import *
+from common.imports import *
 from motor_control.stepmotor_control import StepMotorController
+
 class PanTilt:
     def __init__(self):
         self.frame_center = None
         self.bounding_box_center = None
         
         self.panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
-        self.tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=4)
+        self.tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=2)
 
         self.panMotor.return_to_initial()
         self.tiltMotor.return_to_initial()
