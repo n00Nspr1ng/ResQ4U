@@ -51,6 +51,7 @@ void bldc_control(float distance)
     analogWrite(SPEED_IN1, 150);
     delay(50);
     analogWrite(SPEED_IN1, speed);
+    delay(6000);
   }
   else if (speed < 190)
   {
@@ -60,6 +61,7 @@ void bldc_control(float distance)
     analogWrite(SPEED_IN1, 170);
     delay(250);
     analogWrite(SPEED_IN1, speed);
+    delay(8000);
   }
   else if (speed < 210)
   {
@@ -70,6 +72,7 @@ void bldc_control(float distance)
     analogWrite(SPEED_IN1, 190);
     delay(250);
     analogWrite(SPEED_IN1, speed);
+    delay(10000);
   }
 }
 
