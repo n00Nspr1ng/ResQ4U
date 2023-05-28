@@ -7,44 +7,29 @@ from common import config
 from motor_control.stepmotor_control import StepMotorController
 #from common.config import stepmotor
 
-#from serial_communication.arduino_serial import SerialWrapper
+from serial_communication.arduino_serial import SerialWrapper
 
 if __name__ == "__main__":
-    # try: 
-    #     arduino = serial.Serial(config.arduino_uno.port, config.arduino_uno.baudrate, timeout=1)
-    #     arduino.reset_input_buffer()
 
-    #     arduino.isOpen()
-    #     print(arduino.name)
-    # except:
-    #     print("Error")
+    arduino = SerialWrapper(device=config.arduino_uno)
 
-    # while True:
-    #     if arduino.in_waiting > 0:
-    #         line = arduino.readline().decode('utf-8').rstrip()
-    #         print(line)
+    print("sending flag f")
+    arduino.send_flag("f")
+    while(arduino.end_flag == False):
+        arduino.check_end_flag()
+    print("rasp ended")
 
-    # arduino = SerialWrapper(config.arduino_uno)
-    # while True:
-    #     print("Sending detect_flag")
-    #     arduino.send_flag("detect")
-    #     time.sleep(0.2)
+    # panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
+    # tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=2)
     
-    #     print("Sending align flag")
-    #     arduino.send_flag("align")
-    #     time.sleep(0.2)
+    # time.sleep(2)
+    # for i in range(20):
+    #     panMotor.move(angle=1, ccw_dir=-1)
+    #     tiltMotor.move(angle=1, ccw_dir=-1)
+    # time.sleep(0.2)
 
-    panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
-    tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=2)
-    
-    time.sleep(2)
-    for i in range(20):
-        panMotor.move(angle=1, ccw_dir=-1)
-        tiltMotor.move(angle=1, ccw_dir=-1)
-    time.sleep(0.2)
-
-    panMotor.return_to_initial()
-    tiltMotor.return_to_initial()
+    # panMotor.return_to_initial()
+    # tiltMotor.return_to_initial()
 
     #time.sleep(0.2)
     #for i in range(15):

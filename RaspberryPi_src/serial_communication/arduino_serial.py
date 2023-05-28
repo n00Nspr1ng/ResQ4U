@@ -21,21 +21,33 @@ class SerialWrapper():
         except:
             print("Device can not be found or can not be configured.")
 
-        # Flags to send to device
+        # Flags
+        self.init_flag : bool = False
         self.detect_flag : bool = False
         self.align_flag : bool = False
         self.end_flag : bool = False
 
         # Flush buffer
         self.device.reset_input_buffer()
+        
+        while(self.init_flag == False):
+            print(self.read_line())
+            if (self.read_line() == "Arduino is ready"):
+                self.init_flag = True
 
 
-    #Use either get_flag or wait_until_flag
+    def read_line(self):
+        if self.device.readable():
+            line = self.device.readline().decode('utf-8').rstrip()
+
+            return line
+
+
     def check_end_flag(self): 
         if self.device.readable():
             line = self.device.readline().decode('utf-8').rstrip()
 
-            if (line == "e"):
+            if (line == "ended"):
                 self.align_flag = False
                 self.end_flag = True        
 
