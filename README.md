@@ -18,8 +18,9 @@
 - MD200T BLDC Motor Controller
 - Toothed belt & Stepper motor driven Linear Translator for Feeding
 ### Detection
-- IR Night Vision Camera - Pi Camera with IR-cut filter & LED
+- RPi IR-CUT Camera with 5 megapixel OV5647 sensor
 - Benwake TF02(pro) one-point LiDAR
+- 3.3V infrared fill flash LED
 ### Pan-tilt
 - Sanyo Denki 103h7126-0447 stepper motor 
-- servo motor (not specified yet)
+- Stepping Motor
