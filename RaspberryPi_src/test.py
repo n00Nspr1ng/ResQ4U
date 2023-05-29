@@ -12,6 +12,8 @@ from camera_detection.detect_person import PersonDetector
 
 from pan_tilt.stepmotor_control import StepMotorController
 
+from alert.relay_control import Relay
+
 if __name__ == "__main__":
 
     # arduino = SerialWrapper(device=config.arduino_uno)
@@ -59,6 +61,11 @@ if __name__ == "__main__":
     detector.detect()
     
     caller.callHELP()
+    
+    relay.on(config.searchlight)
+    print('searchlight ON')
+    relay.on(config.alert)
+    print('alert ON')
 
     # arduino.send_flag("d")
     # time.sleep(5)
@@ -70,3 +77,4 @@ if __name__ == "__main__":
     print("end. returning to initial")
     
     pan_tilt.return_to_init()
+    
