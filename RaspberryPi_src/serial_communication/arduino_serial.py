@@ -23,6 +23,7 @@ class SerialWrapper():
 
         # Flags
         self.init_flag : bool = False
+        self.standby_flag : bool = False
         self.detect_flag : bool = False
         self.align_flag : bool = False
         self.end_flag : bool = False
@@ -31,9 +32,12 @@ class SerialWrapper():
         self.device.reset_input_buffer()
         
         while(self.init_flag == False):
-            print(self.read_line())
-            if (self.read_line() == "Arduino is ready"):
+            line = self.read_line()
+            print(line)
+            if (line() == "Arduino is ready"):
                 self.init_flag = True
+                
+        self.standby_flag = True
 
 
     def read_line(self):
