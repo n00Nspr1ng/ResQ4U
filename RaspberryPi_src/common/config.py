@@ -17,9 +17,6 @@ class tilt_motor:
     STEP : int = 20
     DIR : int = 16
 
-# Servo motor for tilt, set up as GPIO.BCM
-servomotor : int = 25
-
 # Relay modules, set up as GPIO.BCM
 searchlight : int = 17
 alert : int = 26
