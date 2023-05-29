@@ -20,5 +20,6 @@ class tilt_motor:
 # Servo motor for tilt, set up as GPIO.BCM
 servomotor : int = 25
 
+# Relay modules, set up as GPIO.BCM
 searchlight : int = 17
 alert : int = 26
