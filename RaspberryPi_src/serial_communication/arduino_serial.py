@@ -23,7 +23,6 @@ class SerialWrapper():
 
         # Flags
         self.init_flag : bool = False
-        self.standby_flag : bool = False
         self.detect_flag : bool = False
         self.align_flag : bool = False
         self.end_flag : bool = False
@@ -36,8 +35,6 @@ class SerialWrapper():
             print(line)
             if (line() == "Arduino is ready"):
                 self.init_flag = True
-                
-        self.standby_flag = True
 
 
     def read_line(self):
