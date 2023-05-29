@@ -8,8 +8,9 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
+
 class PersonDetector():
-    def __init__(self, config, pan_tilt, show_image=True):
+    def __init__(self, config, pan_tilt, arduino, show_image=True):
         self.show_image = show_image
 
         # Flag for detection start
@@ -28,7 +29,7 @@ class PersonDetector():
         self.crop_size = 300
         self.cropped_im_center = [0, 0]
         self.sliding_idx_x = 3
-        self.sliding_idx_y = 2
+        self.sliding_idx_y = 3
         self.sliding_pixel_x = int((self.width - self.crop_size) / (self.sliding_idx_x - 1))
         self.sliding_pixel_y = int((self.height - self.crop_size) / (self.sliding_idx_y - 1))
 
@@ -38,6 +39,7 @@ class PersonDetector():
         self.j = 0
 
         self.pan_tilt = pan_tilt
+        self.arduino = arduino
 
         default_model_dir = '/home/roboin/ResQ4U/RaspberryPi_src/all_models/'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
@@ -64,17 +66,17 @@ class PersonDetector():
         self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
         #cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
 
-    def detect(self):
 
+    def detect(self):
         while self.cap.isOpened():
             ret, frame = self.cap.read()
             if not ret:
                 break
             
             # Visualize grid
-            # cv2_im = cv2.line(frame, (int(self.width / 2), 0), (int(self.width / 2), self.height), (255,255,255), 1)
-            # cv2_im = cv2.line(frame, (0, int(self.height / 2)), (self.width, int(self.height / 2)), (255,255,255), 1)
-            # cv2_im = cv2.line(frame, (0, int(self.height / 2) + self.align_offset), (self.width, int(self.height / 2) + self.align_offset), (255,255,255), 1)
+            cv2_im = cv2.line(frame, (int(self.width / 2), 0), (int(self.width / 2), self.height), (255,255,255), 1)
+            cv2_im = cv2.line(frame, (0, int(self.height / 2)), (self.width, int(self.height / 2)), (255,255,255), 1)
+            cv2_im = cv2.line(frame, (0, int(self.height / 2) + self.align_offset), (self.width, int(self.height / 2) + self.align_offset), (255,255,255), 1)
 
             if self.j < self.sliding_idx_y - 1:
                 if self.i < self.sliding_idx_x - 1:
@@ -109,7 +111,11 @@ class PersonDetector():
             cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
     
             if self.is_detected:
+                self.arduino.send_flag("d") # detected
                 self.pan_tilt.pan_tilt([self.xc, self.yc])
+                if self.pan_tilt.align_flag == True:
+                    self.arduino.send_flag("a")
+                    break
 
             if self.show_image == True:
                 cv2.imshow('frame', frame)
@@ -155,10 +161,7 @@ class PersonDetector():
                 self.count = 0
 
         return cv2_im
-        
 
-    def get_center(self):
-        return self.xc, self.yc
 
 
 if __name__ == '__main__':

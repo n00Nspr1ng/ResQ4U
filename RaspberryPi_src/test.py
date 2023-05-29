@@ -53,7 +53,18 @@ if __name__ == "__main__":
     # pan_tilt.pan_tilt([300, 200])
 
     pan_tilt = PanTilt(config)
+    arduino = SerialWrapper(device=config.arduino_uno)
+    detector = PersonDetector(config, pan_tilt, arduino)
+    
+    detector.detect()
 
-    detector = PersonDetector(config, pan_tilt)
-    while True:
-        detector.detect()
+    # arduino.send_flag("d")
+    # time.sleep(5)
+    # arduino.send_flag("a")
+
+    while(arduino.end_flag == False):
+        arduino.check_end_flag()
+        #print(arduino.read_line())
+    print("end. returning to initial")
+    
+    pan_tilt.return_to_init()

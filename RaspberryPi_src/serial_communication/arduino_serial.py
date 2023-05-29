@@ -46,6 +46,7 @@ class SerialWrapper():
     def check_end_flag(self): 
         if self.device.readable():
             line = self.device.readline().decode('utf-8').rstrip()
+            print(line)
 
             if (line == "ended"):
                 self.align_flag = False

@@ -13,8 +13,8 @@ class PanTilt:
         self.pan_angle = 0
         self.tilt_angle = 0
 
-        #self.panMotor.return_to_initial()
-        #self.tiltMotor.return_to_initial()
+        self.align_flag : bool = False
+        self.count = 0
 
 
     def pan_tilt(self, bounding_box_center): # used previous algorithm I made..
@@ -29,6 +29,9 @@ class PanTilt:
             error_y = - self.frame_center[1] + bounding_box_center[1]
 
             if (abs(error_x) > error_threshold) or (abs(error_y) > error_threshold):
+                self.align_flag = False
+                self.count = 0
+
                 if error_x > 0:
                     self.panMotor.move(angle=pan_step, ccw_dir=0)
                     self.pan_angle += pan_step
@@ -53,5 +56,14 @@ class PanTilt:
 
                 #self.panMotor.move(angle=self.pan_angle, ccw_dir=pan_dir)
                 #self.tiltMotor.move(angle=self.tilt_angle, ccw_dir=tilt_dir)
+            else:
+                self.count += 1
+                if (self.count == 20):
+                    self.align_flag = True
+
         else :
             print('self.bounding box center is NONE')
+
+    def return_to_init(self):
+        self.panMotor.return_to_initial()
+        self.tiltMotor.return_to_initial()
