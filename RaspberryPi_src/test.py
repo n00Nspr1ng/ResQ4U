@@ -57,6 +57,8 @@ if __name__ == "__main__":
     detector = PersonDetector(config, pan_tilt, arduino)
     
     detector.detect()
+    
+    caller.callHELP()
 
     # arduino.send_flag("d")
     # time.sleep(5)
