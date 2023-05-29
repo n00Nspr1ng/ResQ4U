@@ -76,6 +76,8 @@ class PersonDetector():
         
 
     def detect(self):
+        self.arduino.end_flag = False
+        
         try:
             while self.cap.isOpened():
                 ret, frame = self.cap.read()
