@@ -20,5 +20,4 @@ class Relay:
             self.on()
 
 if __name__ == '__main__':
-    relay_SearchLight = Relay(searchlight)
-    relay_Alert = Relay(alert)
+    relay = Relay()
