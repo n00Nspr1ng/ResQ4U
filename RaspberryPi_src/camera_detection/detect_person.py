@@ -8,8 +8,8 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.edgetpu import run_inference
 
-class personDetector():
-    def __init__(self, show_image=True):
+class PersonDetector():
+    def __init__(self, config, pan_tilt, show_image=True):
         self.show_image = show_image
 
         # Flag for detection start
@@ -37,7 +37,8 @@ class personDetector():
         self.i = 0
         self.j = 0
 
-    def detect(self):
+        self.pan_tilt = pan_tilt
+
         default_model_dir = '/home/roboin/ResQ4U/RaspberryPi_src/all_models/'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
         # default_model = 'yolov5s-int8-224_edgetpu.tflite'
@@ -52,19 +53,21 @@ class personDetector():
         parser.add_argument('--camera_idx', type=int, help='Index of which video source to use. ', default = 0)
         parser.add_argument('--threshold', type=float, default=0.5,
                             help='classifier score threshold')
-        args = parser.parse_args()
+        self.args = parser.parse_args()
 
-        print('Loading {} with {} labels.'.format(args.model, args.labels))
-        interpreter = make_interpreter(args.model)
-        interpreter.allocate_tensors()
-        labels = read_label_file(args.labels)
-        inference_size = input_size(interpreter)
+        print('Loading {} with {} labels.'.format(self.args.model, self.args.labels))
+        self.interpreter = make_interpreter(self.args.model)
+        self.interpreter.allocate_tensors()
+        self.labels = read_label_file(self.args.labels)
+        self.inference_size = input_size(self.interpreter)
 
-        # cap = cv2.VideoCapture(args.camera_idx, cv2.CAP_V4L)
-        cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
+        self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
+        #cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
 
-        while cap.isOpened():
-            ret, frame = cap.read()
+    def detect(self):
+
+        while self.cap.isOpened():
+            ret, frame = self.cap.read()
             if not ret:
                 break
             
@@ -99,18 +102,21 @@ class personDetector():
             cv2_im = frame[y1:y2, x1:x2]
 
             cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-            cv2_im_rgb = cv2.resize(cv2_im_rgb, inference_size)
-            run_inference(interpreter, cv2_im_rgb.tobytes())
-            objs = get_objects(interpreter, args.threshold)[:args.top_k]
-            cv2_im = self.append_objs_to_img(cv2_im, inference_size, objs, labels)
+            cv2_im_rgb = cv2.resize(cv2_im_rgb, self.inference_size)
+            run_inference(self.interpreter, cv2_im_rgb.tobytes())
+            objs = get_objects(self.interpreter, self.args.threshold)[:self.args.top_k]
+            cv2_im = self.append_objs_to_img(cv2_im, self.inference_size, objs, self.labels)
             cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
-            
+    
+            if self.is_detected:
+                self.pan_tilt.pan_tilt([self.xc, self.yc])
+
             if self.show_image == True:
                 cv2.imshow('frame', frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
-        cap.release()
+        self.cap.release()
         cv2.destroyAllWindows()
 
     def append_objs_to_img(self, cv2_im, inference_size, objs, labels):
@@ -129,7 +135,7 @@ class personDetector():
 
                 self.xc = self.cropped_im_center[0] - int(self.crop_size / 2) + int((x0+x1)/2)
                 self.yc = self.cropped_im_center[1] - int(self.crop_size / 2) + int((y0+y1)/2)
-                print(self.xc, self.yc)
+                #print(self.xc, self.yc)
 
                 percent = int(100 * obj.score)
 
@@ -156,6 +162,6 @@ class personDetector():
 
 
 if __name__ == '__main__':
-    detector = personDetector()
+    detector = PersonDetector()
     detector.detect()
     print(detector.get_center())

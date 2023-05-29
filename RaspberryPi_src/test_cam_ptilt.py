@@ -30,6 +30,7 @@ class Robot:
             if self.human_detection.if_detected(frame):
                 print("!detected!")
                 self.pan_tilt.frame_center = (frame.shape[1] // 2, frame.shape[0] // 2)
+                print(frame.shape)
                 self.pan_tilt.pan_tilt_to_match_frame_center_to_bounding_box_center()
                 print("target in threshold")
             if not self.human_detection.if_detected(frame):
