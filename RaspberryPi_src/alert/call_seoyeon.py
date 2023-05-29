@@ -1,8 +1,9 @@
 # Code for Emergency Call
+from common.imports import *
 
 # Account info..
-account_sid = 'ACb9b1f9a5734af366c962dc679fecb4a7' # dahyun account.. will be used
-auth_token = 'b3f435c08897918d7570d5d9586d90ff'
+account_sid = 'type dahyun sid' # dahyun account.. will be used
+auth_token = 'type dahyun token'
 twilio_number = '+13159225838'
 recipient_number = '+821090531622' # dahyun phone num for test ,,,,
 
