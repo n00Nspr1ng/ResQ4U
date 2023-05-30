@@ -1,5 +1,4 @@
-import RPi.GPIO as GPIO
-import time
+from common.imports import *
 
 class StepMotorController:
     '''
