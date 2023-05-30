@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-
-import serial
-import time
+from common.imports import *
 from common import config
 
 from pan_tilt.pan_tilt import PanTilt
