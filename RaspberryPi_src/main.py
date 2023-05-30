@@ -5,13 +5,9 @@ import time
 from common import config
 
 from pan_tilt.pan_tilt import PanTilt
-
 from serial_communication.arduino_serial import SerialWrapper
-
 from camera_detection.detect_person import PersonDetector
-
 from pan_tilt.stepmotor_control import StepMotorController
-
 from alert.relay_control import Relay
 
 if __name__ == "__main__":
