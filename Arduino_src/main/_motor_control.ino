@@ -46,33 +46,9 @@ void bldc_control(float distance)
   digitalWrite(START_STOP2, LOW);
 
   // Slowly increase motor speed
-  if (speed < 170)
-  {
-    analogWrite(SPEED_IN1, 150);
-    delay(50);
-    analogWrite(SPEED_IN1, speed);
-    delay(6000);
-  }
-  else if (speed < 190)
-  {
-    Serial.println("ff");
-    analogWrite(SPEED_IN1, 150);
+  for (int i = 150; i <= speed; i += 5) {
+    analogWrite(SPEED_IN1, i);
     delay(250);
-    analogWrite(SPEED_IN1, 170);
-    delay(250);
-    analogWrite(SPEED_IN1, speed);
-    delay(8000);
-  }
-  else if (speed < 210)
-  {
-    analogWrite(SPEED_IN1, 150);
-    delay(250);
-    analogWrite(SPEED_IN1, 170);
-    delay(250);
-    analogWrite(SPEED_IN1, 190);
-    delay(250);
-    analogWrite(SPEED_IN1, speed);
-    delay(10000);
   }
 }
 
@@ -82,29 +58,9 @@ void turn_off_motor()
   Serial.println(current_speed);
   
   // Slowly decrease motor speed
-  if (current_speed < 170)
-  {
-    analogWrite(SPEED_IN1, 150);
+  for (int i = current_speed; i >= 150; i -= 5) {
+    analogWrite(SPEED_IN1, i);
     delay(250);
-    analogWrite(SPEED_IN1, 125);
-  }
-  else if (current_speed < 190)
-  {
-    analogWrite(SPEED_IN1, 170);
-    delay(250);
-    analogWrite(SPEED_IN1, 150);
-    delay(250);
-    analogWrite(SPEED_IN1, 125);
-  }
-  else if (current_speed < 210)
-  {
-    analogWrite(SPEED_IN1, 190);
-    delay(250);
-    analogWrite(SPEED_IN1, 170);
-    delay(250);
-    analogWrite(SPEED_IN1, 150);
-    delay(250);
-    analogWrite(SPEED_IN1, 125);
   }
 
   // Turn motor off
