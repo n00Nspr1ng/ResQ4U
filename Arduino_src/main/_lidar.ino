@@ -1,4 +1,4 @@
-SoftwareSerial Serial1(LIDAR_RX, LIDAR_TX);
+SoftwareSerial TF02_Serial(LIDAR_RX, LIDAR_TX);
 
 int dist;
 int strength;
@@ -29,8 +29,7 @@ int  final_dist = 0;
 bool calculation_flag = false;
 
 void initialize_lidar() {
-  Serial1.begin(115200);
-
+  TF02_Serial.begin(115200);
   Serial.println("Done LiDAR initialization");
 }
 
@@ -95,13 +94,13 @@ void filter() {
 
 void lidar_loop() {
 
-  if (Serial1.available()) {
-    if (Serial1.read() == HEADER) {
+  if (TF02_Serial.available()) {
+    if (TF02_Serial.read() == HEADER) {
       uart[0] = HEADER;
-      if (Serial1.read() == HEADER) {
+      if (TF02_Serial.read() == HEADER) {
         uart[1] = HEADER;
         for (loop_i = 2; loop_i < 9; loop_i++) {
-          uart[loop_i] = Serial1.read();
+          uart[loop_i] = TF02_Serial.read();
         }
         check = uart[0] + uart[1] + uart[2] + uart[3] + uart[4] + uart[5] + uart[6] + uart[7];
         if (uart[8] == (check & 0xff)) {
