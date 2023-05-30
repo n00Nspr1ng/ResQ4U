@@ -1,16 +1,16 @@
-# import argparse
-# import cv2
-# import os
+import argparse
+import cv2
+import os
 
-# from pycoral.adapters.common import input_size
-# from pycoral.adapters.detect import get_objects
-# from pycoral.utils.dataset import read_label_file
-# from pycoral.utils.edgetpu import make_interpreter
-# from pycoral.utils.edgetpu import run_inference
-from .imports import *
-
+from pycoral.adapters.common import input_size
+from pycoral.adapters.detect import get_objects
+from pycoral.utils.dataset import read_label_file
+from pycoral.utils.edgetpu import make_interpreter
+from pycoral.utils.edgetpu import run_inference
+# from .common.imports import *
+# config, pan_tilt, arduino, 
 class PersonDetector():
-    def __init__(self, config, pan_tilt, arduino, show_image=True):
+    def __init__(self, show_image=True):
         self.show_image = show_image
 
         # Flag for detection start
@@ -23,8 +23,8 @@ class PersonDetector():
         self.yc = 0
         
         # Input image size
-        self.height = 480
-        self.width = 640
+        self.height = 1080
+        self.width = 1920
         
         self.crop_size = 300
         self.cropped_im_center = [0, 0]
@@ -38,8 +38,8 @@ class PersonDetector():
         self.i = 0
         self.j = 0
 
-        self.pan_tilt = pan_tilt
-        self.arduino = arduino
+        # self.pan_tilt = pan_tilt
+        # self.arduino = arduino
 
         default_model_dir = '/home/roboin/ResQ4U/RaspberryPi_src/all_models/'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
@@ -63,20 +63,23 @@ class PersonDetector():
         self.labels = read_label_file(self.args.labels)
         self.inference_size = input_size(self.interpreter)
 
-        self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)         #cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
-        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
+        # cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
+        width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         print('* original camera frame size: %d, %d' % (width, height))
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-        width_stream = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        height_stream = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+        width_stream = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+        height_stream = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
         print('** set streaming frame size to: %d, %d' % (width_stream, height_stream))
         print('streaming set done')
+        self.cap.set(cv2.CAP_PROP_FPS, 10)
+        print('fps set to 5')
         
 
     def detect(self):
-        self.arduino.end_flag = False
+        # self.arduino.end_flag = False
         
         try:
             while self.cap.isOpened():
@@ -121,12 +124,12 @@ class PersonDetector():
                 cv2_im = self.append_objs_to_img(cv2_im, self.inference_size, objs, self.labels)
                 cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
 
-                if self.is_detected:
-                    self.arduino.send_flag("d") # detected
-                    self.pan_tilt.pan_tilt([self.xc, self.yc])
-                    if self.pan_tilt.align_flag == True:
-                        self.arduino.send_flag("a")
-                        break
+                # if self.is_detected:
+                #     self.arduino.send_flag("d") # detected
+                #     self.pan_tilt.pan_tilt([self.xc, self.yc])
+                #     if self.pan_tilt.align_flag == True:
+                #         self.arduino.send_flag("a")
+                #         break
 
                 if self.show_image == True:
                     cv2.imshow('frame', frame)
@@ -168,14 +171,14 @@ class PersonDetector():
                                             cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 2)
                 cv2_im = cv2.circle(cv2_im, (int((x0+x1)/2), int((y0+y1)/2)), 3, (255,255,255), -1)
         
-        if (self.is_detected == True):
-            self.count = 0
-            self.tracking = True
-        else:
-            self.count += 1
-            if (self.count > 20):
-                self.tracking = False
-                self.count = 0
+        # if (self.is_detected == True):
+        #     self.count = 0
+        #     self.tracking = True
+        # else:
+        #     self.count += 1
+        #     if (self.count > 20):
+        #         self.tracking = False
+        #         self.count = 0
 
         return cv2_im
 
