@@ -24,3 +24,6 @@
 ### Pan-tilt
 - Sanyo Denki 103h7126-0447 stepper motor 
 - Stepping Motor
+
+## Circuit Diagram
+![Schematic_ResQ4U_2023-05-30 (5)](https://github.com/dn0908/RESQ4U/assets/94898107/24431a74-91d6-4f9d-b41b-ca80d7d470a3)
