@@ -1,5 +1,5 @@
 unsigned int delay_time = 40;
-unsigned int steps = 4800;
+unsigned int      steps = 4800;
 
 void initialize_feeder()
 {
