@@ -7,7 +7,7 @@
 # from pycoral.utils.dataset import read_label_file
 # from pycoral.utils.edgetpu import make_interpreter
 # from pycoral.utils.edgetpu import run_inference
-from common.imports import *
+from .imports import *
 
 class PersonDetector():
     def __init__(self, config, pan_tilt, arduino, show_image=True):
