@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-
-import serial
-import time
+import sys
+sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
+from imports import *
 
 class SerialWrapper():
     '''

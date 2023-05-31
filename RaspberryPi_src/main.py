@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
-from common.imports import *
-from common import config
+import sys
+sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
+from imports import *
 
 from pan_tilt.pan_tilt import PanTilt
 from serial_communication.arduino_serial import SerialWrapper

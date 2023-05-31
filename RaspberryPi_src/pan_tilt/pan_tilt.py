@@ -1,4 +1,6 @@
-#from common.imports import *
+import sys
+sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
+from imports import *
 from .stepmotor_control import StepMotorController
 
 

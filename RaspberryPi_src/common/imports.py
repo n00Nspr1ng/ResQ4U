@@ -1,5 +1,5 @@
+#!/usr/bin/env python3
 # IMPORTS
-
 import argparse
 import cv2
 import os
@@ -12,7 +12,7 @@ from pycoral.utils.edgetpu import run_inference
 
 import serial
 import time
-from common import config
+import config
 
 import RPi.GPIO as GPIO
 

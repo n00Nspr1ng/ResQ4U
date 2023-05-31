@@ -1,13 +1,7 @@
-import argparse
-import cv2
-import os
+import sys
+sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
+from imports import *
 
-from pycoral.adapters.common import input_size
-from pycoral.adapters.detect import get_objects
-from pycoral.utils.dataset import read_label_file
-from pycoral.utils.edgetpu import make_interpreter
-from pycoral.utils.edgetpu import run_inference
-# from .common.imports import *
 # config, pan_tilt, arduino, 
 class PersonDetector():
     def __init__(self, show_image=True):
@@ -22,7 +16,7 @@ class PersonDetector():
         self.xc = 0
         self.yc = 0
         
-        # Input image size
+        # Input image size setting to 1080p
         self.height = 1080
         self.width = 1920
         
@@ -67,14 +61,14 @@ class PersonDetector():
         # cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
         width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        print('* original camera frame size: %d, %d' % (width, height))
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+        print('* original frame size setting: width=%d, height=%d' % (width, height))
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         width_stream = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height_stream = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        print('** set streaming frame size to: %d, %d' % (width_stream, height_stream))
+        print('** set streaming frame size to: width=%d, height=%d' % (width_stream, height_stream))
         print('streaming set done')
-        self.cap.set(cv2.CAP_PROP_FPS, 10)
+        self.cap.set(cv2.CAP_PROP_FPS, 5)
         print('fps set to 5')
         
 
