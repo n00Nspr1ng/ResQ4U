@@ -56,17 +56,14 @@ void turn_off_motor()
 {
   Serial.print("current speed at");
   Serial.println(current_speed);
-  
   // Slowly decrease motor speed
   for (int i = current_speed; i >= 150; i -= 5) {
     analogWrite(SPEED_IN1, i);
     delay(250);
   }
-
   // Turn motor off
   digitalWrite(START_STOP1, HIGH);
   digitalWrite(START_STOP2, HIGH);
-
 }
 
 
@@ -76,10 +73,8 @@ int get_speed(float distance)
   int high = 9;
   int mid;
   
-  while (low <= high)
-  {
+  while (low <= high){
     mid = (low + high) / 2;
-    
     if (speed_dist_chart[mid][1] < distance)
       low = mid + 1;
     else if (speed_dist_chart[mid][1] > distance)
@@ -95,12 +90,10 @@ int get_speed(float distance)
   // Interpolate distances from chart
   float dist1 = speed_dist_chart[index1][1];
   float dist2 = speed_dist_chart[index2][1];
-  
   float ratio = (distance - dist1) / (dist2 - dist1);
   
   int speed1 = speed_dist_chart[index1][0];
   int speed2 = speed_dist_chart[index2][0];
-  
   int bldc_input = round(speed1 + ratio * (speed2 - speed1));
   
   return bldc_input;
