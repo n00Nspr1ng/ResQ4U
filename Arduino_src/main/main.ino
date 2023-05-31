@@ -3,7 +3,7 @@
 char flag;
 float distance;
 
-bool send_dist_flag = false;
+bool send_align_flag = false;
 
 void setup()
 {
@@ -36,8 +36,8 @@ void loop()
   }
   else if (flag == 'a') //Flag : "aligned"
   {
-    if (send_dist_flag == false){
-      put_dist_flag();
+    if (send_align_flag == false){
+      put_align_flag();
       send_dist_flag = true;
     }
     lidar_loop();
