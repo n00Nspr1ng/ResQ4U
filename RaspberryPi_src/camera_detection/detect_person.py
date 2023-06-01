@@ -16,13 +16,13 @@ class PersonDetector:
         self.xc = 0
         self.yc = 0
         
-        # # Set input image frame size to 1080p FULL HD
-        # self.width  = 1920
-        # self.height = 1080
+        # Set input image frame size to 1080p FULL HD
+        self.width  = 1920
+        self.height = 1080
 
-        # Set input image frame size to 720p HD
-        self.width  = 1280
-        self.height =  720
+        # # Set input image frame size to 720p HD
+        # self.width  = 1280
+        # self.height =  720
         
         self.framerate = 5 #fps
 

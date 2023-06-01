@@ -6,8 +6,8 @@ from .stepmotor_control import StepMotorController
 
 class PanTilt:
     def __init__(self, config):
-        # self.frame_center = [960,540]
-        self.frame_center = [640,360]
+        self.frame_center = [960,540] # 1080p
+        # self.frame_center = [640,360] # 720p
         #self.bounding_box_center = None
         
         self.panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
