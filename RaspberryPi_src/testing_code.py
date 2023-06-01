@@ -57,7 +57,14 @@ if __name__ == "__main__":
     print('searchlight ON')
     relay.on(config.alert)
     print('alert ON')
+
+    arduino.send_flag("d")
+    time.sleep(5)
+    arduino.send_flag("a")
+
+    while(arduino.end_flag == False):
+        arduino.check_end_flag()
+        print(arduino.read_line())
+    print("end. returning to initial")
     
-    # arduino.send_flag("d")
-    # time.sleep(5)
-    # arduino.send_flag("a")
+    pan_tilt.return_to_init()
