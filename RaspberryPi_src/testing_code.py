@@ -57,3 +57,7 @@ if __name__ == "__main__":
     print('searchlight ON')
     relay.on(config.alert)
     print('alert ON')
+    
+    # arduino.send_flag("d")
+    # time.sleep(5)
+    # arduino.send_flag("a")
