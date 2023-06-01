@@ -1,8 +1,8 @@
 import sys
 sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
 from imports import *
-# 
-# , pan_tilt, arduino, show_image=True 
+
+
 class PersonDetector:
     def __init__(self, pan_tilt, arduino, show_image=True ):
         self.show_image = show_image
@@ -20,7 +20,7 @@ class PersonDetector:
         self.width  = 1920
         self.height = 1080
         
-        self.framerate = 7
+        self.framerate = 5 #fps
 
         self.crop_size = 300
         self.cropped_im_center = [0, 0]
@@ -80,75 +80,75 @@ class PersonDetector:
     def detect(self):
         # self.arduino.end_flag = False
         
-        # try:
-        while self.cap.isOpened():
-            ret, frame = self.cap.read()
-            print('try to read ret&frame')
+        try:
+            while self.cap.isOpened():
+                ret, frame = self.cap.read()
+                # print('try to read ret&frame')
 
-            if not ret:
-                print('ret frame NONE')
-                break
-            
-            # Visualize grid
-            cv2_im = cv2.line(frame, (int(self.width / 2), 0), (int(self.width / 2), self.height), (255,255,255), 1)
-            cv2_im = cv2.line(frame, (0, int(self.height / 2)), (self.width, int(self.height / 2)), (255,255,255), 1)
-            cv2_im = cv2.line(frame, (0, int(self.height / 2) + self.align_offset), (self.width, int(self.height / 2) + self.align_offset), (255,255,255), 1)
-
-            if self.j < self.sliding_idx_y - 1:
-                if self.i < self.sliding_idx_x - 1:
-                    self.i += 1
-                else:
-                    self.i = 0
-                    self.j += 1
-            else:
-                if self.i < self.sliding_idx_x - 1:
-                    self.i += 1
-                else:
-                    self.i = 0
-                    self.j = 0
-
-            # Crop image
-            if (self.tracking == True):
-                self.cropped_im_center[0] = max(min(self.xc, self.width - int(self.crop_size / 2)), int(self.crop_size / 2))
-                self.cropped_im_center[1] = max(min(self.yc, self.height - int(self.crop_size / 2)), int(self.crop_size / 2))
-            else:
-                self.cropped_im_center = [int(self.crop_size / 2 + self.sliding_pixel_x * self.i), int(self.crop_size / 2 + self.sliding_pixel_y * self.j)]
-            y1 = self.cropped_im_center[1] - int(self.crop_size / 2)
-            y2 = self.cropped_im_center[1] + int(self.crop_size / 2)
-            x1 = self.cropped_im_center[0] - int(self.crop_size / 2)
-            x2 = self.cropped_im_center[0] + int(self.crop_size / 2)
-            cv2_im = frame[y1:y2, x1:x2]
-
-            cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
-            cv2_im_rgb = cv2.resize(cv2_im_rgb, self.inference_size)
-            run_inference(self.interpreter, cv2_im_rgb.tobytes())
-            objs = get_objects(self.interpreter, self.args.threshold)[:self.args.top_k]
-            cv2_im = self.append_objs_to_img(cv2_im, self.inference_size, objs, self.labels)
-            cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
-
-            if self.is_detected:
-                self.arduino.send_flag("d") # detected
-                self.pan_tilt.pan_tilt([self.xc, self.yc])
-                if self.pan_tilt.align_flag == True:
-                    self.arduino.send_flag("a")
+                if not ret:
+                    print('ret frame NONE')
                     break
+                
+                # Visualize grid
+                cv2_im = cv2.line(frame, (int(self.width / 2), 0), (int(self.width / 2), self.height), (255,255,255), 1)
+                cv2_im = cv2.line(frame, (0, int(self.height / 2)), (self.width, int(self.height / 2)), (255,255,255), 1)
+                cv2_im = cv2.line(frame, (0, int(self.height / 2) + self.align_offset), (self.width, int(self.height / 2) + self.align_offset), (255,255,255), 1)
 
-            cv2.imshow('frame', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-            # if self.show_image == True:
-            #     cv2.imshow('frame', frame)
-            #     if cv2.waitKey(1) & 0xFF == ord('q'):
-            #         break
+                if self.j < self.sliding_idx_y - 1:
+                    if self.i < self.sliding_idx_x - 1:
+                        self.i += 1
+                    else:
+                        self.i = 0
+                        self.j += 1
+                else:
+                    if self.i < self.sliding_idx_x - 1:
+                        self.i += 1
+                    else:
+                        self.i = 0
+                        self.j = 0
+
+                # Crop image
+                if (self.tracking == True):
+                    self.cropped_im_center[0] = max(min(self.xc, self.width - int(self.crop_size / 2)), int(self.crop_size / 2))
+                    self.cropped_im_center[1] = max(min(self.yc, self.height - int(self.crop_size / 2)), int(self.crop_size / 2))
+                else:
+                    self.cropped_im_center = [int(self.crop_size / 2 + self.sliding_pixel_x * self.i), int(self.crop_size / 2 + self.sliding_pixel_y * self.j)]
+                y1 = self.cropped_im_center[1] - int(self.crop_size / 2)
+                y2 = self.cropped_im_center[1] + int(self.crop_size / 2)
+                x1 = self.cropped_im_center[0] - int(self.crop_size / 2)
+                x2 = self.cropped_im_center[0] + int(self.crop_size / 2)
+                cv2_im = frame[y1:y2, x1:x2]
+
+                cv2_im_rgb = cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB)
+                cv2_im_rgb = cv2.resize(cv2_im_rgb, self.inference_size)
+                run_inference(self.interpreter, cv2_im_rgb.tobytes())
+                objs = get_objects(self.interpreter, self.args.threshold)[:self.args.top_k]
+                cv2_im = self.append_objs_to_img(cv2_im, self.inference_size, objs, self.labels)
+                cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
+
+                if self.is_detected:
+                    self.arduino.send_flag("d") # detected
+                    self.pan_tilt.pan_tilt([self.xc, self.yc])
+                    if self.pan_tilt.align_flag == True:
+                        self.arduino.send_flag("a")
+                        break
+
+                cv2.imshow('frame', frame)
+                if cv2.waitKey(1) & 0xFF == ord('q'):
+                    break
+                # if self.show_image == True:
+                #     cv2.imshow('frame', frame)
+                #     if cv2.waitKey(1) & 0xFF == ord('q'):
+                #         break
                         
-        # except Exception as e:
-        #     # Handle any other exceptions that might occur
-        #     print("Error occurred while streaming video :", str(e))
+        except Exception as e:
+            # Handle any other exceptions that might occur
+            print("Error occurred while streaming video :", str(e))
             
-        # finally:
-        # Release the video capture and close any open windows
-        self.cap.release()
-        cv2.destroyAllWindows()
+        finally:
+            # Release the video capture and close any open windows
+            self.cap.release()
+            cv2.destroyAllWindows()
 
     def append_objs_to_img(self, cv2_im, inference_size, objs, labels):
         height, width, channels = cv2_im.shape

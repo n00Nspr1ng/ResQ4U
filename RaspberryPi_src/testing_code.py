@@ -1,4 +1,4 @@
-mport sys
+import sys
 sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
 from imports import *
 
@@ -29,17 +29,17 @@ if __name__ == "__main__":
     #     tiltMotor.move(angle=0.45, ccw_dir=1)
     # time.sleep(0.2)
 
-    # panMotor.return_to_initial()
-    # tiltMotor.return_to_initial()
+    panMotor.return_to_initial()
+    tiltMotor.return_to_initial()
 
-    # time.sleep(0.2)
-    # for i in range(15):
-    #    panMotor.move(angle=0.45, ccw_dir=0)
-    #    tiltMotor.move(angle=0.45, ccw_dir=0)
-    # time.sleep(0.2)
+    time.sleep(0.2)
+    for i in range(15):
+       panMotor.move(angle=0.45, ccw_dir=0)
+       tiltMotor.move(angle=0.45, ccw_dir=0)
+    time.sleep(0.2)
 
-    # panMotor.return_to_initial()
-    # tiltMotor.return_to_initial()
+    panMotor.return_to_initial()
+    tiltMotor.return_to_initial()
     
     # time.sleep(1)
     # panMotor.move(angle=30, dir=1)
