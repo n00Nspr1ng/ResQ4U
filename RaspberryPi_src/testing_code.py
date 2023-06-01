@@ -51,3 +51,9 @@ if __name__ == "__main__":
     # pan_tilt.pan_tilt([300, 200])
 
     print('hello')
+
+    caller.callHELP()
+    relay.on(config.searchlight)
+    print('searchlight ON')
+    relay.on(config.alert)
+    print('alert ON')
