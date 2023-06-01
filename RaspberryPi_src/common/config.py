@@ -17,6 +17,6 @@ class tilt_motor:
     STEP : int = 20
     DIR : int = 16
 
-# Relay modules, set up as GPIO.BCM
+# Relay modules for lights, set up as GPIO.BCM
 searchlight : int = 17
 alert : int = 26

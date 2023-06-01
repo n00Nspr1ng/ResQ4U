@@ -20,11 +20,11 @@ class PanTilt:
         self.count = 0
         
 
-    def pan_tilt(self, bounding_box_center): # used previous algorithm I made..
+    def pan_tilt(self, bounding_box_center):
         
-        error_threshold =  10
+        error_threshold =  10   # theoretically this should be smaller than 5 (cause align delta is 10...)
 
-        pan_step        =  1.5
+        pan_step        =  1.5  # changed due to framerate
         tilt_step       =  0.45
 
         if bounding_box_center is not None:

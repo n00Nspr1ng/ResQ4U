@@ -37,6 +37,7 @@ if __name__ == "__main__":
     while(arduino.end_flag == False):
         arduino.check_end_flag()
         print(arduino.read_line())
+    
     print("END ... Returning to initial state ...")
     
     pan_tilt.return_to_init()
