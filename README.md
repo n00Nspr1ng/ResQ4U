@@ -16,7 +16,7 @@
 ### Launcher
 - 24V 3000rpm BLDC Motor
 - MD200T BLDC Motor Controller
-- Toothed belt & Stepper motor driven Linear Translator for Feeding
+- Toothed belt & Stepper driven Linear Translator for Feeding (Nema17 17HS4401)
 ### Detection
 - RPi IR-CUT Camera with 5 megapixel OV5647 sensor
 - Benwake TF02(pro) one-point LiDAR
