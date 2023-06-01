@@ -59,12 +59,6 @@ if __name__ == "__main__":
     # # 
     detector.detect()
     print(detector.xc, detector.yc)
-    # # detected_Val = detector.is_detected
-    # # if detected_Val == True:
-    # #     arduino.send_flag("d") # detected
-    # #     pan_tilt.pan_tilt([self.xc, self.yc])
-    # #     if pan_tilt.align_flag == True:
-    # #         arduino.send_flag("a")
     
     # if detector.is_detected:
     #     arduino.send_flag("d") # detected
