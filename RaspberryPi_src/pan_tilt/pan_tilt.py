@@ -6,7 +6,8 @@ from .stepmotor_control import StepMotorController
 
 class PanTilt:
     def __init__(self, config):
-        self.frame_center = [960,540]
+        # self.frame_center = [960,540]
+        self.frame_center = [640,360]
         #self.bounding_box_center = None
         
         self.panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
@@ -23,7 +24,7 @@ class PanTilt:
         
         error_threshold =  10
 
-        pan_step        =  0.45
+        pan_step        =  1.5
         tilt_step       =  0.45
 
         if bounding_box_center is not None:
@@ -38,27 +39,17 @@ class PanTilt:
                 if error_x > 0:
                     self.panMotor.move(angle=pan_step, ccw_dir=0)
                     self.pan_angle += pan_step
-                    #pan_dir = 0
                 else:
                     self.panMotor.move(angle=pan_step, ccw_dir=1)
                     self.pan_angle -= pan_step
-                    #pan_dir = 1
                 if error_y > 0:
                     self.tiltMotor.move(angle=tilt_step, ccw_dir=0)
                     self.tilt_angle += tilt_step
-                    #tilt_dir = 0
                 else:
                     self.tiltMotor.move(angle=tilt_step, ccw_dir=1)
                     self.tilt_angle -= tilt_step
-                    #tilt_dir = 1
-
-                #self.pan_angle = max(-50, min(50, self.pan_angle))
-                #self.tilt_angle = max(-35, min(35, self.tilt_angle))
 
                 print("pan angle:", self.pan_angle, " tilt angle:", self.tilt_angle)
-
-                #self.panMotor.move(angle=self.pan_angle, ccw_dir=pan_dir)
-                #self.tiltMotor.move(angle=self.tilt_angle, ccw_dir=tilt_dir)
                 
             else:
                 self.count += 1

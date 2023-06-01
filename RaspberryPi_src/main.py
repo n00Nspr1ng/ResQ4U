@@ -25,7 +25,7 @@ if __name__ == "__main__":
     #         arduino.send_flag("a")
 
 
-    # caller.callHELP()
+    # caller.callHELP() -- test this at last (SID authorization shouldnt be on git public)
 
     searchLight=Relay(pin = config.searchlight)
     searchLight.on()
