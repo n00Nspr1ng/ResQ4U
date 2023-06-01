@@ -6,9 +6,7 @@ from .stepmotor_control import StepMotorController
 
 class PanTilt:
     def __init__(self, config):
-        self.cap = cv2.VideoCapture(0)
-        self.frame_center = None
-        
+        self.frame_center = [960,540]
         #self.bounding_box_center = None
         
         self.panMotor = StepMotorController(config.pan_motor, gear_ratio=4)
@@ -20,17 +18,11 @@ class PanTilt:
         self.align_flag : bool = False
         self.count = 0
         
-    def detect_frame_center(self):
-        ret1, frame1 = self.cap.read()
-        if not ret1:
-            return
-        frame_height, frame_width = frame1.shape[:2]
-        self.frame_center = [int(frame_width/2), int(frame_height/2)]
-        
 
     def pan_tilt(self, bounding_box_center): # used previous algorithm I made..
         
         error_threshold =  10
+
         pan_step        =  0.45
         tilt_step       =  0.45
 
@@ -63,15 +55,16 @@ class PanTilt:
                 #self.pan_angle = max(-50, min(50, self.pan_angle))
                 #self.tilt_angle = max(-35, min(35, self.tilt_angle))
 
-                print("pan=", self.pan_angle, "tilt=", self.tilt_angle)
+                print("pan angle:", self.pan_angle, " tilt angle:", self.tilt_angle)
 
                 #self.panMotor.move(angle=self.pan_angle, ccw_dir=pan_dir)
                 #self.tiltMotor.move(angle=self.tilt_angle, ccw_dir=tilt_dir)
                 
             else:
                 self.count += 1
-                if (self.count == 20):
+                if (self.count == 10):
                     self.align_flag = True
+                    print("count numumana align dwem")
         else :
             print('self.bounding box center is NONE')
             

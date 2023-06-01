@@ -4,7 +4,7 @@ from imports import *
 # 
 # , pan_tilt, arduino, show_image=True 
 class PersonDetector:
-    def __init__(self, show_image=True ):
+    def __init__(self, pan_tilt, arduino, show_image=True ):
         self.show_image = show_image
 
         # Flag for detection start
@@ -20,10 +20,12 @@ class PersonDetector:
         self.width  = 1920
         self.height = 1080
         
+        self.framerate = 7
+
         self.crop_size = 300
         self.cropped_im_center = [0, 0]
-        self.sliding_idx_x = 3
-        self.sliding_idx_y = 3
+        self.sliding_idx_x = 5
+        self.sliding_idx_y = 5
         self.sliding_pixel_x = int((self.width - self.crop_size) / (self.sliding_idx_x - 1))
         self.sliding_pixel_y = int((self.height - self.crop_size) / (self.sliding_idx_y - 1))
 
@@ -32,8 +34,8 @@ class PersonDetector:
         self.i = 0
         self.j = 0
 
-        # self.pan_tilt = pan_tilt
-        # self.arduino = arduino
+        self.pan_tilt = pan_tilt
+        self.arduino = arduino
 
         default_model_dir = '/home/roboin/ResQ4U/RaspberryPi_src/all_models/'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
@@ -57,8 +59,8 @@ class PersonDetector:
         self.labels = read_label_file(self.args.labels)
         self.inference_size = input_size(self.interpreter)
 
-        # self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
-        self.cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
+        self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
+        # self.cap = cv2.VideoCapture('/dev/vidoe0', cv2.CAP_V4L)
 
         width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
@@ -71,8 +73,8 @@ class PersonDetector:
         print('** set streaming frame size to: width=%d, height=%d' % (width_stream, height_stream))
         print('streaming set done')
         
-        self.cap.set(cv2.CAP_PROP_FPS, 5)
-        print('fps set to 5')
+        self.cap.set(cv2.CAP_PROP_FPS, self.framerate)
+        print(f'fps set to {self.framerate}')
         
 
     def detect(self):
@@ -125,20 +127,19 @@ class PersonDetector:
             cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
 
             if self.is_detected:
-                break
-            #     self.arduino.send_flag("d") # detected
-            #     self.pan_tilt.pan_tilt([self.xc, self.yc])
-            #     if self.pan_tilt.align_flag == True:
-            #         self.arduino.send_flag("a")
-            #         break
-
-            # cv2.imshow('frame', frame)
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #     break
-            if self.show_image == True:
-                cv2.imshow('frame', frame)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
+                self.arduino.send_flag("d") # detected
+                self.pan_tilt.pan_tilt([self.xc, self.yc])
+                if self.pan_tilt.align_flag == True:
+                    self.arduino.send_flag("a")
                     break
+
+            cv2.imshow('frame', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            # if self.show_image == True:
+            #     cv2.imshow('frame', frame)
+            #     if cv2.waitKey(1) & 0xFF == ord('q'):
+            #         break
                         
         # except Exception as e:
         #     # Handle any other exceptions that might occur
@@ -148,8 +149,6 @@ class PersonDetector:
         # Release the video capture and close any open windows
         self.cap.release()
         cv2.destroyAllWindows()
-        detected_Val = self.is_detected
-        return self.is_detected
 
     def append_objs_to_img(self, cv2_im, inference_size, objs, labels):
         height, width, channels = cv2_im.shape

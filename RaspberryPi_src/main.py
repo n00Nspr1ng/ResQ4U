@@ -55,25 +55,25 @@ if __name__ == "__main__":
 
     pan_tilt = PanTilt(config)
     arduino = SerialWrapper(device=config.arduino_uno)
-    detector = PersonDetector()
+    detector = PersonDetector(pan_tilt, arduino, show_image=True )
     # # 
     detector.detect()
-    # detected_Val = detector.is_detected
-    # if detected_Val == True:
+    print(detector.xc, detector.yc)
+    # # detected_Val = detector.is_detected
+    # # if detected_Val == True:
+    # #     arduino.send_flag("d") # detected
+    # #     pan_tilt.pan_tilt([self.xc, self.yc])
+    # #     if pan_tilt.align_flag == True:
+    # #         arduino.send_flag("a")
+    
+    # if detector.is_detected:
     #     arduino.send_flag("d") # detected
-    #     pan_tilt.pan_tilt([self.xc, self.yc])
+    #     pan_tilt.pan_tilt([detector.xc, detector.yc])
     #     if pan_tilt.align_flag == True:
     #         arduino.send_flag("a")
-    
-    if detector.is_detected:
-        arduino.send_flag("d") # detected
-        pan_tilt.pan_tilt([self.xc, self.yc])
-        if pan_tilt.align_flag == True:
-            arduino.send_flag("a")
 
 
     # caller.callHELP()
-    
     # relay.on(config.searchlight)
     # print('searchlight ON')
     # relay.on(config.alert)
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     while(arduino.end_flag == False):
         arduino.check_end_flag()
-        #print(arduino.read_line())
+        print(arduino.read_line())
     print("end. returning to initial")
     
     pan_tilt.return_to_init()

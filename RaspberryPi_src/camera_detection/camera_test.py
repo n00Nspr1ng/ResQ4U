@@ -3,8 +3,8 @@ sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
 from imports import *
 # config, pan_tilt, arduino, 
 class PersonDetector():
-    def __init__(self, show_image=True):
-        self.show_image = show_image
+    def __init__(self):
+        # self.show_image = show_image
 
         # Flag for detection start
         self.is_detected = False
@@ -57,7 +57,7 @@ class PersonDetector():
         self.inference_size = input_size(self.interpreter)
 
         self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
-        # self.cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+        # self.cap = cv2.VideoCapture('/dev/video0', cv2.CAP_GSTREAMER)
 
         width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
@@ -142,7 +142,7 @@ class PersonDetector():
         #     print("Error occurred while streaming video :", str(e))
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
-                breaks
+                break
         # finally:
         # Release the video capture and close any open windows
         self.cap.release()
