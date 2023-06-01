@@ -1,10 +1,9 @@
 import sys
 sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
 from imports import *
-# 
-# , show_image=True , arduino
+# config, pan_tilt, arduino, 
 class PersonDetector():
-    def __init__(self, pan_tilt, arduino, show_image=True ):
+    def __init__(self, show_image=True):
         self.show_image = show_image
 
         # Flag for detection start
@@ -16,7 +15,7 @@ class PersonDetector():
         self.xc = 0
         self.yc = 0
         
-        # Set input image frame size to 1080p
+        # Input image size setting to 1080p
         self.width  = 1920
         self.height = 1080
         
@@ -32,8 +31,8 @@ class PersonDetector():
         self.i = 0
         self.j = 0
 
-        self.pan_tilt = pan_tilt
-        self.arduino = arduino
+        # self.pan_tilt = pan_tilt
+        # self.arduino = arduino
 
         default_model_dir = '/home/roboin/ResQ4U/RaspberryPi_src/all_models/'
         default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
@@ -57,8 +56,8 @@ class PersonDetector():
         self.labels = read_label_file(self.args.labels)
         self.inference_size = input_size(self.interpreter)
 
-        # self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
-        self.cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
+        self.cap = cv2.VideoCapture(self.args.camera_idx, cv2.CAP_V4L)
+        # self.cap = cv2.VideoCapture('/dev/video0', cv2.CAP_V4L)
 
         width = self.cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
@@ -83,6 +82,8 @@ class PersonDetector():
             ret, frame = self.cap.read()
             print('try to read ret&frame')
 
+            
+            
             if not ret:
                 print('ret frame NONE')
                 break
@@ -124,25 +125,24 @@ class PersonDetector():
             cv2_im = self.append_objs_to_img(cv2_im, self.inference_size, objs, self.labels)
             cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
 
-            if self.is_detected:
-                self.arduino.send_flag("d") # detected
-                self.pan_tilt.pan_tilt([self.xc, self.yc])
-                if self.pan_tilt.align_flag == True:
-                    self.arduino.send_flag("a")
-                    break
+            # if self.is_detected:
+            #     self.arduino.send_flag("d") # detected
+            #     self.pan_tilt.pan_tilt([self.xc, self.yc])
+            #     if self.pan_tilt.align_flag == True:
+            #         self.arduino.send_flag("a")
+            #         break
 
-            # cv2.imshow('frame', frame)
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #     break
-            if self.show_image == True:
-                cv2.imshow('frame', frame)
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                    break
+            # if self.show_image == True:
+            #     cv2.imshow('frame', frame)
+            #     if cv2.waitKey(1) & 0xFF == ord('q'):
+            #         break
                         
         # except Exception as e:
         #     # Handle any other exceptions that might occur
         #     print("Error occurred while streaming video :", str(e))
-            
+            cv2.imshow('frame', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                breaks
         # finally:
         # Release the video capture and close any open windows
         self.cap.release()
@@ -187,6 +187,6 @@ class PersonDetector():
 
 
 
-# if __name__ == '__main__':
-#     detector = PersonDetector()
-#     detector.detect()
+if __name__ == '__main__':
+    detector = PersonDetector()
+    detector.detect()

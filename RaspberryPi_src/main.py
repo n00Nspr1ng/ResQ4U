@@ -6,7 +6,9 @@ from pan_tilt.pan_tilt import PanTilt
 from serial_communication.arduino_serial import SerialWrapper
 from camera_detection.detect_person import PersonDetector
 from pan_tilt.stepmotor_control import StepMotorController
-from alert.relay_control import Relay
+# from alert.relay_control import Relay
+
+# from camera_detection.camera_test import PersonDetector
 
 if __name__ == "__main__":
 
@@ -22,7 +24,7 @@ if __name__ == "__main__":
     # tiltMotor = StepMotorController(config.tilt_motor, gear_ratio=2)
     
     # time.sleep(2)
-    # for i in range(30):
+    # for i in range(60):
     #     panMotor.move(angle=0.45, ccw_dir=1)
     #     tiltMotor.move(angle=0.45, ccw_dir=1)
     # time.sleep(0.2)
@@ -48,18 +50,19 @@ if __name__ == "__main__":
     # pan_tilt = PanTilt(config)
     # pan_tilt.pan_tilt([300, 200])
 
+    print('hello')
     pan_tilt = PanTilt(config)
     arduino = SerialWrapper(device=config.arduino_uno)
-    detector = PersonDetector(config, pan_tilt, arduino)
-    
+    detector = PersonDetector(pan_tilt, arduino, show_image)
+    # # 
     detector.detect()
     
-    caller.callHELP()
+    # caller.callHELP()
     
-    relay.on(config.searchlight)
-    print('searchlight ON')
-    relay.on(config.alert)
-    print('alert ON')
+    # relay.on(config.searchlight)
+    # print('searchlight ON')
+    # relay.on(config.alert)
+    # print('alert ON')
 
     # arduino.send_flag("d")
     # time.sleep(5)

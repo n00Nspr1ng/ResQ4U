@@ -32,7 +32,7 @@ class SerialWrapper():
         while(self.init_flag == False):
             line = self.read_line()
             print(line)
-            if (line() == "Arduino is ready"):
+            if (line == "Arduino is ready"):
                 self.init_flag = True
 
 
@@ -63,7 +63,7 @@ class SerialWrapper():
         self.device.write(flag.encode())
 
 
-# if __name__ == "__main__":
-#     device = SerialWrapper(arduino_uno)
-#     device.read()
+if __name__ == "__main__":
+    device = SerialWrapper(config.arduino_uno)
+    device.read_line()
     
