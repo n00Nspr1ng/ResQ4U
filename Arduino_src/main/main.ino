@@ -53,7 +53,6 @@ void loop()
   }
   else if (flag == 'f') //Flag: "feeder"
   {  
-    bldc_control(4.5);
     move_feeder();
     delay(3000);
     

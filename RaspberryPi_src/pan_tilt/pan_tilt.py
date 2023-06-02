@@ -6,8 +6,8 @@ from .stepmotor_control import StepMotorController
 
 class PanTilt:
     def __init__(self, config):
-        # self.frame_center = [960,540] # 1080p
-        self.frame_center = [640,360] # 720p
+        self.frame_center = [960,540] # 1080p
+        # self.frame_center = [640,360] # 720p
         # self.frame_center = [320,240] # 480p
         #self.bounding_box_center = None
         
@@ -25,11 +25,12 @@ class PanTilt:
         
         error_threshold =  10   # theoretically this should be smaller than 5 (cause align delta is 10...)
 
-        pan_step   : int = 4  # changed due to framerate (*should be multiple of 1.8)
-        tilt_step  : int = 4
+        pan_step        : int = 8   
+        tilt_step_low   : int = 4   # minimum for tilting down
+        tilt_step_high  : int = 16  # Overshooting method for tilting up
 
         if bounding_box_center is not None:
-            print("frame:", self.frame_center, "bbox:", bounding_box_center)
+            # print("frame:", self.frame_center, "bbox:", bounding_box_center)
             error_x = self.frame_center[0] - bounding_box_center[0]
             error_y = - self.frame_center[1] + bounding_box_center[1]
 
@@ -43,14 +44,15 @@ class PanTilt:
                 else:
                     self.panMotor.move_v2(step=pan_step, ccw_dir=1)
                     self.pan_step -= pan_step
+                
                 if error_y > 0:
-                    self.tiltMotor.move_v2(step=tilt_step, ccw_dir=0)
-                    self.tilt_step += tilt_step
+                    self.tiltMotor.move_v2(step=tilt_step_low, ccw_dir=0)
+                    self.tilt_step += tilt_step_low
                 else:
-                    self.tiltMotor.move_v2(step=tilt_step, ccw_dir=1)
-                    self.tilt_step -= tilt_step
+                    self.tiltMotor.move_v2(step=tilt_step_high, ccw_dir=1)
+                    self.tilt_step -= tilt_step_high
 
-                print("pan step:", self.pan_step, " tilt step:", self.tilt_step)
+                # print("pan step:", self.pan_step, " tilt step:", self.tilt_step)
                 
             else:
                 self.count += 1

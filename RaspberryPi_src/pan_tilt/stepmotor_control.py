@@ -66,7 +66,7 @@ class StepMotorController:
             self.current_step += step
         else:
             self.current_step -= step
-        #print("step =", self.current_step)
+        print("step =", self.current_step)
 
 
     def return_to_initial(self):
@@ -83,10 +83,10 @@ class StepMotorController:
         step = self.current_step
         print(step)
         if (step > 0):
-            self.move(step, 1) # move back ccw
+            self.move_v2(step, 1) # move back ccw
             print("1")
         else:
-            self.move(-step, 0) # move back cw
+            self.move_v2(-step, 0) # move back cw
             print("0")    
 
 
