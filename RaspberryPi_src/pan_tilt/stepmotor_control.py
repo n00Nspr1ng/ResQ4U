@@ -16,9 +16,11 @@ class StepMotorController:
         self.STEP = stepmotor.STEP
         self.DIR = stepmotor.DIR
         self.delay_time = delay_time
-        self.current_angle = 0
         self.gear_ratio = gear_ratio
         self.angle_per_step = 1.8/16
+
+        self.current_angle = 0
+        self.current_step = 0
 
         # Setup for GPIO
         GPIO.setmode(GPIO.BCM)
@@ -49,10 +51,10 @@ class StepMotorController:
         #print("current angle of step motor = ", self.current_angle)
         
 
-    def move_v2(self, step, dir): #DEPRECATED
+    def move_v2(self, step, ccw_dir): #DEPRECATED
         # Set direction
         # 0 -> CW(+), 1-> CCW(-)
-        GPIO.output(self.DIR, dir)
+        GPIO.output(self.DIR, ccw_dir)
 
         # Move step 
         for i in range(step):
@@ -60,11 +62,11 @@ class StepMotorController:
             time.sleep(self.delay_time)
             GPIO.output(self.STEP, GPIO.LOW)
             time.sleep(self.delay_time)
-        if (dir == 0):
-            self.current_angle += step*self.angle_per_step
+        if (ccw_dir == 0):
+            self.current_step += step
         else:
-            self.current_angle -= step*self.angle_per_step
-        print("angle =", self.current_angle)
+            self.current_step -= step
+        #print("step =", self.current_step)
 
 
     def return_to_initial(self):
@@ -76,6 +78,16 @@ class StepMotorController:
         else:
             self.move(-angle, 0) # move back cw
             print("0")
+
+    def return_to_initial2(self):
+        step = self.current_step
+        print(step)
+        if (step > 0):
+            self.move(step, 1) # move back ccw
+            print("1")
+        else:
+            self.move(-step, 0) # move back cw
+            print("0")    
 
 
     def get_angle(self): # Erase if not used

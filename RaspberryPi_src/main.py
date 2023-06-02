@@ -15,9 +15,9 @@ if __name__ == "__main__":
 
     # inits
     pan_tilt = PanTilt(config)
-    arduino = SerialWrapper(device=config.arduino_uno)
-    detector = PersonDetector(pan_tilt, arduino, show_image=True)
-    
+    # arduino = SerialWrapper(device=config.arduino_uno)
+    detector = PersonDetector(pan_tilt, show_image=True)
+    # arduino, 
     # DETECT
     detector.detect()
     
@@ -26,31 +26,31 @@ if __name__ == "__main__":
     # caller.callHELP() -- test this at last (SID authorization shouldnt be on git public)
 
     # Turn Search Light ON
-    searchLight=Relay(pin = config.searchlight)
-    searchLight.on()
-    print('Searchlight ON ...')
+    # searchLight=Relay(pin = config.searchlight)
+    # searchLight.on()
+    # print('Searchlight ON ...')
     
-    # Turn Alert Siren ON
-    alertLight = Relay(pin = config.alert)
-    alertLight.on()
-    print('Alert ON ...')
+    # # Turn Alert Siren ON
+    # alertLight = Relay(pin = config.alert)
+    # alertLight.on()
+    # print('Alert ON ...')
 
-    # Read Arduino
-    while(arduino.end_flag == False):
-        arduino.check_end_flag()
-        print(arduino.read_line())
+    # # Read Arduino
+    # while(arduino.end_flag == False):
+    #     arduino.check_end_flag()
+    #     print(arduino.read_line())
     
-    #################### AFTER LAUNHCH RETURN INIT ####################
+    # #################### AFTER LAUNHCH RETURN INIT ####################
     
-    print("END ... Returning to initial state ...")
+    # print("END ... Returning to initial state ...")
     
-    # PanTilt to initial State
-    pan_tilt.return_to_init()
+    # # PanTilt to initial State
+    # pan_tilt.return_to_init()
     
-    # Turn Search Light OFF
-    searchLight.off()
-    print('Searchlight OFF ...')
+    # # Turn Search Light OFF
+    # searchLight.off()
+    # print('Searchlight OFF ...')
 
-    # Turn Alert Siren OFF
-    alertLight.off()
-    print('Alert OFF ...')
+    # # Turn Alert Siren OFF
+    # alertLight.off()
+    # print('Alert OFF ...')

@@ -38,7 +38,7 @@ void loop()
   {
     if (send_align_flag == false){
       put_align_flag();
-      send_dist_flag = true;
+      send_align_flag = true;
     }
     lidar_loop();
 

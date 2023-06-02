@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/home/roboin/ResQ4U/RaspberryPi_src/common')
 from imports import *
-
+# 
 
 class PersonDetector:
     def __init__(self, pan_tilt, arduino, show_image=True ):
@@ -17,14 +17,18 @@ class PersonDetector:
         self.yc = 0
         
         # Set input image frame size to 1080p FULL HD
-        self.width  = 1920
-        self.height = 1080
+        # self.width  = 1920
+        # self.height = 1080
 
-        # # Set input image frame size to 720p HD
-        # self.width  = 1280
-        # self.height =  720
+        # # # Set input image frame size to 720p HD
+        self.width  = 1280
+        self.height =  720
         
-        self.framerate = 5 #fps
+        # Set input image frame size to 480p HD
+        # self.width  = 640
+        # self.height = 480
+
+        self.framerate = 30 #fps
 
         self.crop_size = 300
         self.cropped_im_center = [0, 0]
@@ -82,10 +86,10 @@ class PersonDetector:
         
 
     def detect(self):
-        # self.arduino.end_flag = False
         
         try:
             while self.cap.isOpened():
+                # print(self.cap.isOpened())
                 ret, frame = self.cap.read()
                 # print('try to read ret&frame')
 
@@ -93,6 +97,7 @@ class PersonDetector:
                     print('ret frame NONE')
                     break
                 
+
                 # Visualize grid
                 cv2_im = cv2.line(frame, (int(self.width / 2), 0), (int(self.width / 2), self.height), (255,255,255), 1)
                 cv2_im = cv2.line(frame, (0, int(self.height / 2)), (self.width, int(self.height / 2)), (255,255,255), 1)
@@ -111,6 +116,7 @@ class PersonDetector:
                         self.i = 0
                         self.j = 0
 
+                print("tracking:", self.tracking)
                 # Crop image
                 if (self.tracking == True):
                     self.cropped_im_center[0] = max(min(self.xc, self.width - int(self.crop_size / 2)), int(self.crop_size / 2))
@@ -129,13 +135,17 @@ class PersonDetector:
                 objs = get_objects(self.interpreter, self.args.threshold)[:self.args.top_k]
                 cv2_im = self.append_objs_to_img(cv2_im, self.inference_size, objs, self.labels)
                 cv2_im = cv2.rectangle(cv2_im, (0, 0), (self.crop_size, self.crop_size), (0, 0, 255), 2)
-
+                
+                print("is_detected:", self.is_detected)
                 if self.is_detected:
                     self.arduino.send_flag("d") # detected
                     self.pan_tilt.pan_tilt([self.xc, self.yc])
                     if self.pan_tilt.align_flag == True:
                         self.arduino.send_flag("a")
                         break
+                else:
+                    self.arduino.device.reset_input_buffer()
+
 
                 cv2.imshow('frame', frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
