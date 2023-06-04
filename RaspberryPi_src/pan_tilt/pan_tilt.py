@@ -25,14 +25,20 @@ class PanTilt:
         
         error_threshold =  10   # theoretically this should be smaller than 5 (cause align delta is 10...)
 
-        pan_step        : int = 8   
+        pan_step        : int = 12   
         tilt_step_low   : int = 4   # minimum for tilting down
-        tilt_step_high  : int = 16  # Overshooting method for tilting up
+        tilt_step_high  : int = 32 # Overshooting method for tilting up
 
         if bounding_box_center is not None:
             # print("frame:", self.frame_center, "bbox:", bounding_box_center)
+            
+            print(bounding_box_center)
+            
             error_x = self.frame_center[0] - bounding_box_center[0]
             error_y = - self.frame_center[1] + bounding_box_center[1]
+
+            print("error_x = ", error_x)
+            print("error_y = ", error_y)
 
             if (abs(error_x) > error_threshold) or (abs(error_y) > error_threshold):
                 self.align_flag = False
@@ -52,7 +58,7 @@ class PanTilt:
                     self.tiltMotor.move_v2(step=tilt_step_high, ccw_dir=1)
                     self.tilt_step -= tilt_step_high
 
-                # print("pan step:", self.pan_step, " tilt step:", self.tilt_step)
+                print("pan step:", self.pan_step, " tilt step:", self.tilt_step)
                 
             else:
                 self.count += 1

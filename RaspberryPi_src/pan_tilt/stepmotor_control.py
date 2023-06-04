@@ -66,7 +66,7 @@ class StepMotorController:
             self.current_step += step
         else:
             self.current_step -= step
-        print("step =", self.current_step)
+        # print("step =", self.current_step)
 
 
     def return_to_initial(self):

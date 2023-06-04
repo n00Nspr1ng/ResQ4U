@@ -13,7 +13,7 @@ class PersonDetector:
         self.tracking = False
         self.count = 0
 
-        # Initialize bounding box center point
+        # Initialize bounding box centder point
         self.xc = 0
         self.yc = 0
         
@@ -33,8 +33,8 @@ class PersonDetector:
 
         self.crop_size = 300
         self.cropped_im_center = [0, 0]
-        self.sliding_idx_x = 5
-        self.sliding_idx_y = 5
+        self.sliding_idx_x = 7
+        self.sliding_idx_y = 6
         self.sliding_pixel_x = int((self.width - self.crop_size) / (self.sliding_idx_x - 1))
         self.sliding_pixel_y = int((self.height - self.crop_size) / (self.sliding_idx_y - 1))
 
@@ -86,10 +86,8 @@ class PersonDetector:
         
 
     def detect(self):
-        print("inside")
         
         # try:
-        print(self.cap.isOpened())
         while self.cap.isOpened():
             ret, frame = self.cap.read()
 
