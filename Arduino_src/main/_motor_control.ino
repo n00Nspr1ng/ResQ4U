@@ -48,7 +48,7 @@ void bldc_control(float distance)
   // Slowly increase motor speed
   for (int i = 150; i <= speed; i += 5) {
     analogWrite(SPEED_IN1, i);
-    delay(250);
+    delay(200);
   }
 }
 
