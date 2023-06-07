@@ -66,9 +66,6 @@ void loop()
 
     //Send flag to Raspberry Pi
     Serial.println("Arduino Ended");
-    
-    flag = 's'; //Flag : "stand by" -- is this needed?
-    
     reset_arduino();
   }
 }
