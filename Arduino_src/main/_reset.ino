@@ -1,6 +1,7 @@
 void initialize_arduino()
 {
   digitalWrite(RESET, HIGH);
+  delay(200);
   pinMode(RESET, OUTPUT);
 }
 
