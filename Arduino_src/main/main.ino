@@ -66,6 +66,8 @@ void loop()
 
     //Send flag to Raspberry Pi
     Serial.println("Arduino Ended");
+    
+    //Reset Arduino
     reset_arduino();
   }
 }
