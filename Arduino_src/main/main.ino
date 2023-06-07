@@ -9,7 +9,8 @@ void setup()
 {
   // Serial for Raspberry Pi
   Serial.begin(9600); 
-
+  initialize_arduino();
+  
   initialize_bldc();
   initialize_lidar();
   initialize_feeder();
@@ -64,8 +65,10 @@ void loop()
     return_feeder();
 
     //Send flag to Raspberry Pi
-    Serial.println("ended");
+    Serial.println("Arduino Ended");
     
-    flag = 's'; //Flag : "stand by"
+    flag = 's'; //Flag : "stand by" -- is this needed?
+    
+    reset_arduino();
   }
 }
